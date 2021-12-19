@@ -1,15 +1,13 @@
-import java.util.ArrayList;
-
 /**
  * Segmentovka
  * 
  * @author Peter Hulák
  */
 public class Segmentovka {
-    private ArrayList<Segment> segmenty;
+    private Segment[] segmenty;
     
     public Segmentovka(int poziciaX, int poziciaY, int velkost) {
-        this.segmenty = new ArrayList<>();
+        this.segmenty = new Segment[7];
         this.generujSegmenty(poziciaX, poziciaY, velkost);
     }
     
@@ -17,18 +15,18 @@ public class Segmentovka {
         int sirka = velkost;
         int vyska = velkost / 5;
         
-        this.segmenty.add(new Segment(sirka, vyska, vyska + poziciaX, poziciaY));
-        this.segmenty.add(new Segment(vyska, sirka, vyska + sirka + poziciaX, vyska + poziciaY));
-        this.segmenty.add(new Segment(vyska, sirka, vyska + sirka + poziciaX, 2 * vyska + sirka + poziciaY));
-        this.segmenty.add(new Segment(sirka, vyska, vyska + poziciaX, 2 * vyska + 2 * sirka + poziciaY));
-        this.segmenty.add(new Segment(vyska, sirka, poziciaX, 2 * vyska + sirka + poziciaY));
-        this.segmenty.add(new Segment(vyska, sirka, poziciaX, vyska + poziciaY));
-        this.segmenty.add(new Segment(sirka, vyska, vyska + poziciaX, vyska + sirka + poziciaY));
+        this.segmenty[0] = new Segment(sirka, vyska, vyska + poziciaX, poziciaY);
+        this.segmenty[1] = new Segment(vyska, sirka, vyska + sirka + poziciaX, vyska + poziciaY);
+        this.segmenty[2] = new Segment(vyska, sirka, vyska + sirka + poziciaX, 2 * vyska + sirka + poziciaY);
+        this.segmenty[3] = new Segment(sirka, vyska, vyska + poziciaX, 2 * vyska + 2 * sirka + poziciaY);
+        this.segmenty[4] = new Segment(vyska, sirka, poziciaX, 2 * vyska + sirka + poziciaY);
+        this.segmenty[5] = new Segment(vyska, sirka, poziciaX, vyska + poziciaY);
+        this.segmenty[6] = new Segment(sirka, vyska, vyska + poziciaX, vyska + sirka + poziciaY);
     }
     
     private void zobrazKonkretneSegmenty(boolean[] zoznamSegmentov) {
         for (int i = 0; i < zoznamSegmentov.length; ++i) {
-            this.segmenty.get(i).prepni(zoznamSegmentov[i]);
+            this.segmenty[i].prepni(zoznamSegmentov[i]);
         }
     }
     

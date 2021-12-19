@@ -1,8 +1,0 @@
-#BlueJ class context
-comment0.target=Segment
-comment0.text=\r\n\ Segment\r\n\ \r\n\ @author\ Peter\ Hul\u00E1k\r\n
-comment1.params=sirka\ dlzka\ poziciaX\ poziciaY
-comment1.target=Segment(int,\ int,\ int,\ int)
-comment2.params=zapnut
-comment2.target=void\ prepni(boolean)
-numComments=3
