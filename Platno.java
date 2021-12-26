@@ -161,6 +161,8 @@ public class Platno {
             this.graphic.setColor(Color.magenta);
         } else if (farba.equals("white")) {
             this.graphic.setColor(Color.white);
+        } else if (farba.equals("gray")) {
+            this.graphic.setColor(new Color(150, 150, 150));
         } else {
             this.graphic.setColor(Color.black);
         }
