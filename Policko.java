@@ -6,6 +6,7 @@ public class Policko extends UIPrvok{
     private int velkostStrany;
     private int x;
     private int y;
+    private int minyVOkoli;
     
     public Policko(int velkostStrany, int x, int y) {
         super(velkostStrany, velkostStrany, x, y);
@@ -16,6 +17,7 @@ public class Policko extends UIPrvok{
         this.velkostStrany = velkostStrany;
         this.x = x;
         this.y = y;
+        this.minyVOkoli = 0;
 
         super.zobraz();
     }
@@ -57,7 +59,9 @@ public class Policko extends UIPrvok{
 
     public void klik(boolean laveTlacidlo) {
         if (!laveTlacidlo) {
-            //TODO: vlajka
+            if(this.stavPolicka != StavPolicka.ZOBRAZENE) {
+                this.nastavStav((this.stavPolicka == StavPolicka.SKYRTE) ? StavPolicka.VLAJKA : StavPolicka.SKYRTE);
+            }
             return;
         }
 
@@ -66,8 +70,32 @@ public class Policko extends UIPrvok{
         }
     }
 
+    public void nastavMinyVOkoli(int minyVOkoli) {
+        this.minyVOkoli = minyVOkoli;
+    }
+
     private void nastavStav(StavPolicka stavPolicka) {
+        if (this.obrazok != null) {
+            this.obrazok.skry();
+            this.obrazok = null;
+        }
+
         this.stavPolicka = stavPolicka;
         super.zmenFarbu(stavPolicka.getFarba());
+
+        switch(stavPolicka) {
+            case SKYRTE:
+                break;
+            case VLAJKA:
+                this.nastavObrazok(Obrazky.VLAJKA);
+                break;
+            default:
+                if (this.obsahPolicka == ObsahPolicka.MINA) {
+                    this.nastavObrazok(Obrazky.MINA);
+                } else {
+                    this.nastavCislo(this.minyVOkoli);
+                }
+                break;
+        }
     }
 }
