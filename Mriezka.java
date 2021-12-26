@@ -78,7 +78,7 @@ public class Mriezka extends UIPrvok {
         for (int i = 0; i < rozmer; ++i) {
             for (int j = 0; j < rozmer; ++j) {
                 this.policka[j][i] = new Policko(velkostPolicok, x + (i * (velkostPolicok + 1)) + 1, y + (j * (velkostPolicok + 1)) + 1);
-                this.udaje.put(this.policka[j][i], new UdajeOPolicku(i, j));
+                this.udaje.put(this.policka[j][i], new UdajeOPolicku(j, i));
             }
         }
     }
@@ -163,6 +163,7 @@ public class Mriezka extends UIPrvok {
             policko.nastavStav(StavPolicka.ZOBRAZENE);
             //int[] suradnice = this.najdiPolicko(policko);
             int[] suradnice = this.udaje.get(policko).getPozicie();
+            System.out.println(suradnice[0] + "  " + suradnice[1]);
             this.odhalenie(suradnice[0], suradnice[1]);
         }
     }
@@ -186,6 +187,7 @@ public class Mriezka extends UIPrvok {
         return null;
     }
     */
+    
 
     private class UdajeOPolicku {
         private int[] pozicie;
