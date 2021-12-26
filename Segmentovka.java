@@ -42,7 +42,7 @@ public class Segmentovka {
                 this.zobrazKonkretneSegmenty(new boolean[] {true, true, false, true, true, false, true});
                 break;
             case 3:
-                this.zobrazKonkretneSegmenty(new boolean[] {true, true, true, true, false, false, false});
+                this.zobrazKonkretneSegmenty(new boolean[] {true, true, true, true, false, false, true});
                 break;
             case 4:
                 this.zobrazKonkretneSegmenty(new boolean[] {false, true, true, false, false, true, true});

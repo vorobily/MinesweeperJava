@@ -15,7 +15,7 @@ public class Manazer {
     private ArrayList<Object> spravovaneObjekty;
     private ArrayList<Integer> vymazaneObjekty;
     private long oldTick;
-    private static final long TICK_LENGTH = 250000000;
+    private static final long TICK_LENGTH = 1000000000;
     
     private class ManazerCasovaca implements ActionListener {
         public void actionPerformed(ActionEvent event) {

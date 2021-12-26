@@ -40,8 +40,7 @@ public class Platno {
      */
     public static Platno dajPlatno() {
         if (Platno.platnoSingleton == null) {
-            Platno.platnoSingleton = new Platno("Jamky", 800, 600, 
-                                         Color.white);
+            Platno.platnoSingleton = new Platno("Semestralka - Peter Hulak", 800, 600, Color.white);
         }
         Platno.platnoSingleton.setVisible(true);
         return Platno.platnoSingleton;

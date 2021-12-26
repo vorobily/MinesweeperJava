@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.HashMap;
 
 public class Mriezka extends UIPrvok {
     private static final int[][] SMERY = new int[][] { //Konštanta pre kontrolovanie okol. políčok
@@ -15,6 +16,7 @@ public class Mriezka extends UIPrvok {
 
     private Policko[][] policka;
     private ArrayList<Policko> volnePolicka;
+    private HashMap<Object, UdajeOPolicku> udaje;
     private boolean uzKlikol;
     private int pocetMin;
     
@@ -25,6 +27,7 @@ public class Mriezka extends UIPrvok {
 
         this.policka = new Policko[rozmer][rozmer];
         this.volnePolicka = new ArrayList<>();
+        this.udaje = new HashMap<>();
         this.uzKlikol = false;
         this.pocetMin = pocetMin;
         this.generujPolicka(x, y, rozmer, velkostPolicok);
@@ -45,7 +48,8 @@ public class Mriezka extends UIPrvok {
                     policko.klik(laveTlacidlo);
 
                     if (laveTlacidlo) {
-                        int[] suradnice = this.najdiPolicko(policko);
+                        //int[] suradnice = this.najdiPolicko(policko);
+                        int[] suradnice = this.udaje.get(policko).getPozicie();
                         this.odhalenie(suradnice[0], suradnice[1]);
                     }
                     return true;
@@ -74,6 +78,7 @@ public class Mriezka extends UIPrvok {
         for (int i = 0; i < rozmer; ++i) {
             for (int j = 0; j < rozmer; ++j) {
                 this.policka[j][i] = new Policko(velkostPolicok, x + (i * (velkostPolicok + 1)) + 1, y + (j * (velkostPolicok + 1)) + 1);
+                this.udaje.put(this.policka[j][i], new UdajeOPolicku(i, j));
             }
         }
     }
@@ -156,10 +161,14 @@ public class Mriezka extends UIPrvok {
             }
 
             policko.nastavStav(StavPolicka.ZOBRAZENE);
-            int[] suradnice = this.najdiPolicko(policko);
+            //int[] suradnice = this.najdiPolicko(policko);
+            int[] suradnice = this.udaje.get(policko).getPozicie();
             this.odhalenie(suradnice[0], suradnice[1]);
         }
     }
+
+    /*
+    Nahradené HashMapou
 
     private int[] najdiPolicko(Policko policko) {
         int[] suradnice = new int[2];
@@ -176,5 +185,20 @@ public class Mriezka extends UIPrvok {
 
         return null;
     }
+    */
 
+    private class UdajeOPolicku {
+        private int[] pozicie;
+
+        public UdajeOPolicku(int x, int y) {
+            this.pozicie = new int[2];
+
+            this.pozicie[0] = x;
+            this.pozicie[1] = y;
+        }
+
+        public int[] getPozicie() {
+            return this.pozicie;
+        }
+    }
 }
