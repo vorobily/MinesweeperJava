@@ -2,37 +2,72 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Mriezka extends UIPrvok {
+    private static final int[][] SMERY = new int[][] { //Konštanta pre kontrolovanie okol. políčok
+        {-1, -1},
+        {-1, 0},
+        {-1, 1}, 
+        {0, 1},
+        {1, 1}, 
+        {1, 0}, 
+        {1, -1}, 
+        {0, -1}
+    };
+
     private Policko[][] policka;
     private ArrayList<Policko> volnePolicka;
     private boolean uzKlikol;
+    private int pocetMin;
+    
 
-    public Mriezka(int x, int y, int rozmer, int velkostPolicok) {
+    public Mriezka(int x, int y, int rozmer, int velkostPolicok, int pocetMin) {
         super((velkostPolicok + 1) * rozmer + 1, (velkostPolicok + 1) * rozmer + 1, x, y);
         super.zobraz();
 
         this.policka = new Policko[rozmer][rozmer];
         this.volnePolicka = new ArrayList<>();
         this.uzKlikol = false;
+        this.pocetMin = pocetMin;
         this.generujPolicka(x, y, rozmer, velkostPolicok);
     }
 
-    public void klik(int x, int y, boolean laveTlacidlo) {
+    public boolean klik(int x, int y, boolean laveTlacidlo) {
         for (Policko[] rad : this.policka) {
             for (Policko policko : rad) {
                 if (policko.obsahujeSuradnice(x, y)) {
                     if (!this.uzKlikol) {
                         this.najdiVolnePolicka();
                         this.volnePolicka.remove(policko); //Aby sa negenerovala mína na prvom ale zobrazilo míny v okolí
-                        this.generujMiny(20);
+                        this.generujMiny(this.pocetMin);
                         this.prepocitajMinyVOkoli();
                         this.uzKlikol = true;
                     }
 
                     policko.klik(laveTlacidlo);
-                    return;
+
+                    if (laveTlacidlo) {
+                        int[] suradnice = this.najdiPolicko(policko);
+                        this.odhalenie(suradnice[0], suradnice[1]);
+                    }
+                    return true;
                 }
             }
         }
+        return false;
+    }
+
+    public VysledokHry skoncilaHra() {
+        this.najdiVolnePolicka();
+        if (this.volnePolicka.size() == 0) {
+            return VysledokHry.VYHRAL;
+        }
+
+        for (Policko policko : this.vratZoznamMin()) {
+            if (policko.getStavPolicka() == StavPolicka.ZOBRAZENE) {
+                return VysledokHry.PREHRAL;
+            }
+        }
+
+        return VysledokHry.PREBIEHA;
     }
 
     private void generujPolicka(int x, int y, int rozmer, int velkostPolicok) {
@@ -54,6 +89,20 @@ public class Mriezka extends UIPrvok {
         }
     }
 
+    private ArrayList<Policko> vratZoznamMin() {
+        ArrayList<Policko> miny = new ArrayList<>();
+
+        for (Policko[] rad : this.policka) {
+            for (Policko policko : rad) {
+                if (policko.getObsahPolicka() == ObsahPolicka.MINA) {
+                    miny.add(policko);
+                }
+            }
+        }
+
+        return miny;
+    }
+
     private void generujMiny(int pocet) {
         if(pocet >= this.volnePolicka.size()) {
             pocet = this.volnePolicka.size() - 1; //Aby bolo vždy aspoň 1 volné políčko
@@ -65,33 +114,67 @@ public class Mriezka extends UIPrvok {
     }
 
     private void prepocitajMinyVOkoli() {
-        System.out.println("test");
-        int[][] smery = new int[][] {
-            {-1, -1},
-            {-1, 0},
-            {-1, 1}, 
-            {0, 1},
-            {1, 1}, 
-            {1, 0}, 
-            {1, -1}, 
-            {0, -1}
-        };
 
         for (int i = 0; i < this.policka[0].length; ++i) {
             for (int j = 0; j < this.policka[0].length; ++j) {
                 int minyVOkoli = 0;
-                for (int smer = 0; smer < 8; ++smer) {
-                    try {
-                        if (this.policka[i + smery[smer][0]][j + smery[smer][1]].getObsahPolicka() == ObsahPolicka.MINA) {
-                            minyVOkoli++;
-                        }
-                    }
-                    catch(ArrayIndexOutOfBoundsException exception) {
-                        //NIČ :)
+                for (Policko policko : this.getSusednePolicka(i, j)) {
+                    if (policko.getObsahPolicka() == ObsahPolicka.MINA) {
+                        ++minyVOkoli;
                     }
                 }
                 this.policka[i][j].nastavMinyVOkoli(minyVOkoli);
             }
         }
     }
+
+    private ArrayList<Policko> getSusednePolicka(int x, int y) {
+
+        ArrayList<Policko> policka = new ArrayList<>();
+
+        for (int smer = 0; smer < 8; ++smer) {
+            try {
+                Policko policko = this.policka[x + SMERY[smer][0]][y + SMERY[smer][1]];
+                policka.add(policko);
+            }
+            catch(ArrayIndexOutOfBoundsException exception) {
+                //NIČ :)
+            }
+        }
+
+        return policka;
+    }
+
+    private void odhalenie(int x, int y) {
+        if (this.policka[x][y].getMinyVOkoli() != 0 || this.policka[x][y].getObsahPolicka() == ObsahPolicka.MINA) {
+            return;
+        }
+
+        for (Policko policko : this.getSusednePolicka(x, y)) {
+            if (policko.getStavPolicka() == StavPolicka.ZOBRAZENE) {
+                continue;
+            }
+
+            policko.nastavStav(StavPolicka.ZOBRAZENE);
+            int[] suradnice = this.najdiPolicko(policko);
+            this.odhalenie(suradnice[0], suradnice[1]);
+        }
+    }
+
+    private int[] najdiPolicko(Policko policko) {
+        int[] suradnice = new int[2];
+
+        for (int i = 0; i < this.policka[0].length; ++i) {
+            for (int j = 0; j < this.policka[0].length; ++j) {
+                if (this.policka[i][j] == policko) {
+                    suradnice[0] = i;
+                    suradnice[1] = j;
+                    return suradnice;
+                }
+            }
+        }
+
+        return null;
+    }
+
 }

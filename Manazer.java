@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -9,17 +7,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 
-/**
- * Automaticky posiela spravy danym objektom:<br />
- * posunDole() - pri stlaceni klavesy DOWN<br />
- * posunHore() - pri stlaceni klavesy UP<br />
- * posunVlavo() - pri stlacen klavesy LEFT<br />
- * posunVpravo() - pri stlaceni klavesy RIGHT<br />
- * aktivuj() - pri stlaceni klavesy ENTER alebo SPACE<br />
- * zrus() - pri stlaceni klavesy ESC<br />
- * tik() - kazdych 0,25 sekundy<br />
- * vyberSuradnice(x, y) - pri kliknuti mysou
- */
+/*
+Upravená trieda manažér z hodín
+*/
+
 public class Manazer {
     private ArrayList<Object> spravovaneObjekty;
     private ArrayList<Integer> vymazaneObjekty;
@@ -37,11 +28,13 @@ public class Manazer {
     }
     
     private class ManazerMysi extends MouseAdapter {
-        public void mouseClicked(MouseEvent event) {
-            if (event.getButton() == MouseEvent.BUTTON1) {
-                Manazer.this.posliSpravu("klik", event.getX(), event.getY(), true);
-            } else if (event.getButton() == MouseEvent.BUTTON3) {
-                Manazer.this.posliSpravu("klik", event.getX(), event.getY(), false);
+        public void mousePressed(MouseEvent event) {
+            switch (event.getButton()) {
+                case MouseEvent.BUTTON1:
+                    Manazer.this.posliSpravu("klik", event.getX(), event.getY(), true);
+                    break;
+                case MouseEvent.BUTTON3:
+                    Manazer.this.posliSpravu("klik", event.getX(), event.getY(), false);
             }
         }
     }

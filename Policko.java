@@ -1,4 +1,4 @@
-public class Policko extends UIPrvok{
+public class Policko extends UIPrvok {
     private ObsahPolicka obsahPolicka;
     private StavPolicka stavPolicka;
     private Obrazok obrazok;
@@ -74,7 +74,11 @@ public class Policko extends UIPrvok{
         this.minyVOkoli = minyVOkoli;
     }
 
-    private void nastavStav(StavPolicka stavPolicka) {
+    public int getMinyVOkoli() {
+        return this.minyVOkoli;
+    }
+
+    public void nastavStav(StavPolicka stavPolicka) {
         if (this.obrazok != null) {
             this.obrazok.skry();
             this.obrazok = null;
