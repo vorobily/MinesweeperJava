@@ -17,6 +17,8 @@ public class Policko extends UIPrvok{
 
         super.zmenFarbu("white");
         super.zobraz();
+
+        nastavCislo(1);
     }
 
     public boolean obsahujeSuradnice(int x, int y) {

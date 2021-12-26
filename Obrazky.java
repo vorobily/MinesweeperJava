@@ -1,14 +1,14 @@
 public enum Obrazky {
-    MINA("pics/obrazok.png"),
-    VLAJKA("pics/obrazok.png"),
-    CISLO1("pics/obrazok.png"),
-    CISLO2("pics/obrazok.png"),
-    CISLO3("pics/obrazok.png"),
-    CISLO4("pics/obrazok.png"),
-    CISLO5("pics/obrazok.png"),
-    CISLO6("pics/obrazok.png"),
-    CISLO7("pics/obrazok.png"),
-    CISLO8("pics/obrazok.png");
+    MINA("pics/mina.png"),
+    VLAJKA("pics/vlajka.png"),
+    CISLO1("pics/cislica1.png"),
+    CISLO2("pics/cislica2.png"),
+    CISLO3("pics/cislica3.png"),
+    CISLO4("pics/cislica4.png"),
+    CISLO5("pics/cislica5.png"),
+    CISLO6("pics/cislica6.png"),
+    CISLO7("pics/cislica7.png"),
+    CISLO8("pics/cislica8.png");
 
     private String cesta;
 
