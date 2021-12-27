@@ -59,7 +59,7 @@ public class Policko extends UIPrvok {
 
     public void klik(boolean laveTlacidlo) {
         if (!laveTlacidlo) {
-            if(this.stavPolicka != StavPolicka.ZOBRAZENE) {
+            if (this.stavPolicka != StavPolicka.ZOBRAZENE) {
                 this.nastavStav((this.stavPolicka == StavPolicka.SKYRTE) ? StavPolicka.VLAJKA : StavPolicka.SKYRTE);
             }
             return;
@@ -87,7 +87,7 @@ public class Policko extends UIPrvok {
         this.stavPolicka = stavPolicka;
         super.zmenFarbu(stavPolicka.getFarba());
 
-        switch(stavPolicka) {
+        switch (stavPolicka) {
             case SKYRTE:
                 break;
             case VLAJKA:

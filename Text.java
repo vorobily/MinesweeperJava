@@ -49,7 +49,7 @@ public class Text {
        
     public void nakresli() {
         if (this.jeViditelny) {
-            Platno.dajPlatno().drawString(this, this.text, this.x, this.y, this.velkostTextu);
+            Platno.dajPlatno().draw(this, this.text, this.x, this.y, this.velkostTextu);
         }
     }
 }

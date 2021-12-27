@@ -159,7 +159,7 @@ public class Mriezka extends UIPrvok {
     }
 
     private void generujMiny(int pocet) {
-        if(pocet >= this.volnePolicka.size()) {
+        if (pocet >= this.volnePolicka.size()) {
             pocet = this.volnePolicka.size() - 1; //Aby bolo vždy aspoň 1 volné políčko
         }
 
@@ -185,19 +185,18 @@ public class Mriezka extends UIPrvok {
 
     private ArrayList<Policko> getSusednePolicka(int x, int y) {
 
-        ArrayList<Policko> policka = new ArrayList<>();
+        ArrayList<Policko> zoznamPolicok = new ArrayList<>();
 
         for (int smer = 0; smer < 8; ++smer) {
             try {
                 Policko policko = this.policka[x + SMERY[smer][0]][y + SMERY[smer][1]];
-                policka.add(policko);
-            }
-            catch(ArrayIndexOutOfBoundsException exception) {
+                zoznamPolicok.add(policko);
+            } catch (ArrayIndexOutOfBoundsException exception) {
                 //NIČ :)
             }
         }
 
-        return policka;
+        return zoznamPolicok;
     }
 
     private void odhalenie(int x, int y) {
@@ -241,7 +240,7 @@ public class Mriezka extends UIPrvok {
     private class UdajeOPolicku {
         private int[] pozicie;
 
-        public UdajeOPolicku(int x, int y) {
+        UdajeOPolicku(int x, int y) {
             this.pozicie = new int[2];
 
             this.pozicie[0] = x;

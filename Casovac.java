@@ -29,7 +29,7 @@ public class Casovac {
     }
 
     public String getFromatovanyCas() {
-        int cas[] = this.getCas();
+        int[] cas = this.getCas();
         return String.format("%s:%s", Casovac.getHodnotaSNulou(cas[0]), Casovac.getHodnotaSNulou(cas[1]));
     }
 

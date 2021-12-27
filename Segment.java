@@ -11,7 +11,7 @@ public class Segment {
     }
     
     public void prepni(boolean zapnut) {
-        if(zapnut) {
+        if (zapnut) {
             this.segment.zobraz();
         } else {
             this.segment.skry();

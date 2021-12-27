@@ -116,7 +116,7 @@ public class Platno {
         this.redraw();
     }
     
-    public void drawString(Object objekt, String text, int x, int y, int velkostPisma) { 
+    public void draw(Object objekt, String text, int x, int y, int velkostPisma) { 
         this.objekty.remove(objekt);
         this.objekty.add(objekt);
         this.tvary.put(objekt, new PopisTextu(text, x, y, velkostPisma));
@@ -252,7 +252,7 @@ public class Platno {
         private Shape tvar;
         private String farba;
 
-        public PopisTvaru(Shape tvar, String farba) {
+        PopisTvaru(Shape tvar, String farba) {
             this.tvar = tvar;
             this.farba = farba;
         }
@@ -269,7 +269,7 @@ public class Platno {
         private int x;
         private int y;
 
-        public PopisTextu(String text, int x, int y, int velkostPisma) {
+        PopisTextu(String text, int x, int y, int velkostPisma) {
             this.text = text;
             this.velkostPisma = velkostPisma;
             this.x = x;
@@ -287,7 +287,7 @@ public class Platno {
         private BufferedImage obrazok;
         private AffineTransform transformacia;
         
-        public PopisObrazku(BufferedImage obrazok, AffineTransform transformacia) {
+        PopisObrazku(BufferedImage obrazok, AffineTransform transformacia) {
             this.obrazok = obrazok;
             this.transformacia = transformacia;
         }

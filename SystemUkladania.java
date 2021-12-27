@@ -2,8 +2,7 @@ public class SystemUkladania {
 
     private static SystemUkladania instancia = null;
 
-    public static SystemUkladania dajInstanciu()
-    {
+    public static SystemUkladania dajInstanciu() {
         if (SystemUkladania.instancia == null) {
             SystemUkladania.instancia = new SystemUkladania();
         }
@@ -11,8 +10,7 @@ public class SystemUkladania {
         return SystemUkladania.instancia;
     }
 
-    private SystemUkladania()
-    {
+    private SystemUkladania() {
         //TODO :)
     }
 }

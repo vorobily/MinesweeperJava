@@ -1,5 +1,5 @@
 public class Tlacidlo extends UIPrvok {
-    Text text;
+    private Text text;
     private int x;
     private int y;
     private int stranaA;
@@ -27,7 +27,7 @@ public class Tlacidlo extends UIPrvok {
         return x >= this.x && (this.x + this.stranaA) > x && y >= this.y && (this.y + this.stranaB) > y && this.jeAktivne;
     }
 
-    public Tlacidla getId(){
+    public Tlacidla getId() {
         return this.identifikator;
     }
 

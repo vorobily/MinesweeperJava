@@ -5,9 +5,6 @@ public class Miny {
     private Manazer manazer;
     private Casovac casovac;
     private Displej displejMin;
-    private Tlacidlo tlacidloRestart;
-    private Tlacidlo tlacidloNapoveda;
-    private Tlacidlo tlacidloKoniec;
 
     private ArrayList<Tlacidlo> tlacidla;
 
@@ -27,12 +24,9 @@ public class Miny {
         this.aktualizujDisplej(this.pocetMin);
         this.tlacidla = new ArrayList<>();
 
-        this.tlacidloRestart = new Tlacidlo(75, 25, 50, 200, "Reštart", 20, Tlacidla.RESTART);
-        this.tlacidloNapoveda = new Tlacidlo(95, 25, 50, 250, "Nápoveda", 20, Tlacidla.NAPOVEDA);
-        this.tlacidloKoniec = new Tlacidlo(70, 25, 50, 300, "Koniec", 20, Tlacidla.KONIEC);
-        this.registrujTlacidlo(tlacidloRestart);
-        this.registrujTlacidlo(tlacidloNapoveda);
-        this.registrujTlacidlo(tlacidloKoniec);
+        this.registrujTlacidlo(new Tlacidlo(75, 25, 50, 200, "Reštart", 20, Tlacidla.RESTART));
+        this.registrujTlacidlo(new Tlacidlo(95, 25, 50, 250, "Nápoveda", 20, Tlacidla.NAPOVEDA));
+        this.registrujTlacidlo(new Tlacidlo(70, 25, 50, 300, "Koniec", 20, Tlacidla.KONIEC));
 
         this.hraSa = true;
         this.manazer.spravujObjekt(this);
@@ -69,6 +63,7 @@ public class Miny {
                     break;
                 case NAPOVEDA:
                     JOptionPane.showMessageDialog(null, "Lavé tlačidlo myši: Odhalenie políčka\nPravé tlačidlo myši: Položenie vlajky", "Nápoveda", JOptionPane.INFORMATION_MESSAGE);
+                    break;
                 case KONIEC:
                     System.exit(0);    
             }
@@ -98,7 +93,6 @@ public class Miny {
     }
 
     private String formatujTextKoncaHry(VysledokHry vysledok) {
-        int[] cas = this.casovac.getCas();
         return String.format("%s, tvoj čas bol %s", vysledok.getVyhernaSprava(), this.casovac.getFromatovanyCas());
     }
 }

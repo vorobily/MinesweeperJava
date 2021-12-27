@@ -13,14 +13,14 @@ public enum Obrazky {
     private String cesta;
 
     public static Obrazky getCislo(int cislo) {
-        if(cislo < 1 || cislo > 8) {
+        if (cislo < 1 || cislo > 8) {
             return null;
         }
 
         return Obrazky.values()[cislo + 1];
     }
 
-    private Obrazky(String cesta) {
+    Obrazky(String cesta) {
         this.cesta = cesta;
     }
 
