@@ -3,13 +3,15 @@ public class Text {
     private int x;
     private int y;
     private int velkostTextu;
+    private boolean jeViditelny;
 
     public Text(String text, int x, int y, int velkostTextu) {
         this.text = text;
         this.x = x;
         this.y = y;
         this.velkostTextu = velkostTextu;
-        
+        this.jeViditelny = true;
+
         this.nakresli();
     }
 
@@ -28,8 +30,26 @@ public class Text {
         this.velkostTextu = velkostTextu;
         this.nakresli();
     }
+
+    public void zobraz() {
+        this.jeViditelny = true;
+        this.nakresli();
+    }
+
+    public void skry() {
+        this.zmaz();
+        this.jeViditelny = false;
+    }
+
+    private void zmaz() {
+        if (this.jeViditelny) {
+            Platno.dajPlatno().erase(this);
+        }
+    }
        
     public void nakresli() {
-        Platno.dajPlatno().drawString(this, this.text, this.x, this.y, this.velkostTextu);
+        if (this.jeViditelny) {
+            Platno.dajPlatno().drawString(this, this.text, this.x, this.y, this.velkostTextu);
+        }
     }
 }

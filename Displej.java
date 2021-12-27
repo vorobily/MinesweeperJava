@@ -35,4 +35,13 @@ public class Displej {
     public void vynuluj() {
         this.zobraz(0);
     }
+
+    public void skry() {
+        this.segmentovky[0].zobraz(-1);
+        this.segmentovky[1].zobraz(-1);
+    }
+
+    public int getHodnota() {
+        return this.hodnota;
+    }
 }

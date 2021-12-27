@@ -6,9 +6,12 @@ public class Miny {
     private Casovac casovac;
     private Displej displejMin;
     private Tlacidlo tlacidloRestart;
+    private Tlacidlo tlacidloNapoveda;
+    private Tlacidlo tlacidloKoniec;
 
     private ArrayList<Tlacidlo> tlacidla;
 
+    private int pocetMin;
     private boolean hraSa;
     
     public Miny(int rozmer, int velkostPolicok, int pocetMin) {
@@ -20,11 +23,16 @@ public class Miny {
         this.manazer = new Manazer();
         this.casovac = new Casovac(5, 5, 25);
         this.displejMin = new Displej(720, 5, 25, -1);
-        this.aktualizujDisplej(0);
+        this.pocetMin = pocetMin;
+        this.aktualizujDisplej(this.pocetMin);
         this.tlacidla = new ArrayList<>();
 
         this.tlacidloRestart = new Tlacidlo(75, 25, 50, 200, "Reštart", 20, Tlacidla.RESTART);
+        this.tlacidloNapoveda = new Tlacidlo(95, 25, 50, 250, "Nápoveda", 20, Tlacidla.NAPOVEDA);
+        this.tlacidloKoniec = new Tlacidlo(70, 25, 50, 300, "Koniec", 20, Tlacidla.KONIEC);
         this.registrujTlacidlo(tlacidloRestart);
+        this.registrujTlacidlo(tlacidloNapoveda);
+        this.registrujTlacidlo(tlacidloKoniec);
 
         this.hraSa = true;
         this.manazer.spravujObjekt(this);
@@ -33,19 +41,14 @@ public class Miny {
     public void klik(int x, int y, boolean laveTlacidlo) {
         if (this.hraSa) { //Ak prebieha hra
             if (this.mriezka.klik(x, y, laveTlacidlo)) { //Ak klikol na políčko
-                switch (this.mriezka.skoncilaHra()) { //Ak skončila hra
-                    case PREBIEHA:
-                        break;
-                    case VYHRAL:
-                        this.hraSa = false;
-                        this.mriezka.zobrazVsetkyMiny();
-                        JOptionPane.showMessageDialog(null, "Vyhral si");
-                        break;
-                    case PREHRAL:
-                        this.hraSa = false;
-                        this.mriezka.zobrazVsetkyMiny();
-                        JOptionPane.showMessageDialog(null, "Prehral si");
+                VysledokHry vysledok = this.mriezka.skoncilaHra();
+
+                if (vysledok != VysledokHry.PREBIEHA) {
+                    this.hraSa = false;
+                    this.mriezka.zobrazVsetkyMiny();
+                    JOptionPane.showMessageDialog(null, this.formatujTextKoncaHry(vysledok), vysledok.getVyhernaSprava(), JOptionPane.INFORMATION_MESSAGE);
                 }
+
                 int zostava = this.mriezka.getPocetMin() - this.mriezka.getPocetVlajok();
                 this.aktualizujDisplej(zostava);
                 return;
@@ -53,7 +56,7 @@ public class Miny {
         }
 
         for (Tlacidlo tlacidlo : this.tlacidla) {
-            if (!tlacidlo.obsahujeSuradnice(x, y)) {
+            if (!tlacidlo.boloStlacene(x, y)) {
                 continue;
             }
             
@@ -62,7 +65,12 @@ public class Miny {
                     this.casovac.vynuluj();
                     this.hraSa = true;
                     this.mriezka.restart();
-                    this.aktualizujDisplej(0);
+                    this.aktualizujDisplej(this.pocetMin);
+                    break;
+                case NAPOVEDA:
+                    JOptionPane.showMessageDialog(null, "Lavé tlačidlo myši: Odhalenie políčka\nPravé tlačidlo myši: Položenie vlajky", "Nápoveda", JOptionPane.INFORMATION_MESSAGE);
+                case KONIEC:
+                    System.exit(0);    
             }
 
             return;
@@ -87,5 +95,10 @@ public class Miny {
 
     private void registrujTlacidlo(Tlacidlo tlacidlo) {
         this.tlacidla.add(tlacidlo);
+    }
+
+    private String formatujTextKoncaHry(VysledokHry vysledok) {
+        int[] cas = this.casovac.getCas();
+        return String.format("%s, tvoj čas bol %s", vysledok.getVyhernaSprava(), this.casovac.getFromatovanyCas());
     }
 }

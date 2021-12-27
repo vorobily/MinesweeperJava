@@ -20,7 +20,7 @@ public enum Obrazky {
         return Obrazky.values()[cislo + 1];
     }
 
-    Obrazky(String cesta) {
+    private Obrazky(String cesta) {
         this.cesta = cesta;
     }
 

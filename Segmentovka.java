@@ -32,6 +32,8 @@ public class Segmentovka {
     
     public void zobraz(int cislo) {
         switch(cislo) {
+            case -1:
+                this.zobrazKonkretneSegmenty(new boolean[] {false, false, false, false, false, false, false});
             case 0:
                 this.zobrazKonkretneSegmenty(new boolean[] {true, true, true, true, true, true, false});
                 break;

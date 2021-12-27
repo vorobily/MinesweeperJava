@@ -1,3 +1,5 @@
 public enum Tlacidla {
-    RESTART;
+    RESTART,
+    NAPOVEDA,
+    KONIEC;
 }
