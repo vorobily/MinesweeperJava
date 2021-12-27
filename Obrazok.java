@@ -239,7 +239,7 @@ public class Obrazok {
             at.scale(this.velkostX / (double)this.povodnaVelkostX, this.velkostY / (double)this.povodnaVelkostY);
             
             canvas.draw(this, this.obrazok, at);
-            canvas.wait(10);
+            //canvas.wait(10);
         }
     }
 

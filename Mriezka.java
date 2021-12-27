@@ -6,11 +6,11 @@ public class Mriezka extends UIPrvok {
     private static final int[][] SMERY = new int[][] { //Konštanta pre kontrolovanie okol. políčok
         {-1, -1},
         {-1, 0},
-        {-1, 1}, 
+        {-1, 1},
         {0, 1},
-        {1, 1}, 
-        {1, 0}, 
-        {1, -1}, 
+        {1, 1},
+        {1, 0},
+        {1, -1},
         {0, -1}
     };
 
@@ -33,11 +33,26 @@ public class Mriezka extends UIPrvok {
         this.generujPolicka(x, y, rozmer, velkostPolicok);
     }
 
+    public void restart() {
+        for (Policko[] rad : this.policka) {
+            for (Policko policko : rad) {
+                policko.nastavObsahPolicka(ObsahPolicka.VOLNE);
+                policko.nastavObrazok(null);
+                policko.nastavStav(StavPolicka.SKYRTE);
+                this.uzKlikol = false;
+            }
+        }
+    }
+
     public boolean klik(int x, int y, boolean laveTlacidlo) {
         for (Policko[] rad : this.policka) {
             for (Policko policko : rad) {
                 if (policko.obsahujeSuradnice(x, y)) {
                     if (!this.uzKlikol) {
+                        if (!laveTlacidlo) {
+                            return true;
+                        }
+
                         this.najdiVolnePolicka();
                         this.volnePolicka.remove(policko); //Aby sa negenerovala mína na prvom ale zobrazilo míny v okolí
                         this.generujMiny(this.pocetMin);
@@ -65,13 +80,49 @@ public class Mriezka extends UIPrvok {
             return VysledokHry.VYHRAL;
         }
 
-        for (Policko policko : this.vratZoznamMin()) {
-            if (policko.getStavPolicka() == StavPolicka.ZOBRAZENE) {
-                return VysledokHry.PREHRAL;
-            }
+        if (this.jeOdhalenaMina()) {
+            return VysledokHry.PREHRAL;
         }
 
         return VysledokHry.PREBIEHA;
+    }
+
+    public int getPocetMin() {
+        return this.pocetMin;
+    }
+
+    public int getPocetVlajok() {
+        int vlajky = 0;
+
+        for (Policko[] rad : this.policka) {
+            for (Policko policko : rad) {
+                if (policko.getStavPolicka() == StavPolicka.VLAJKA) {
+                    ++vlajky;
+                }
+            }
+        }
+
+        return vlajky;
+    }
+
+    public void zobrazVsetkyMiny() {
+        for (Policko policko : this.najdiMiny()) {
+            policko.nastavObrazok(Obrazky.MINA);
+        }
+    }
+
+    private ArrayList<Policko> najdiMiny() {
+        ArrayList<Policko> miny = new ArrayList<>();
+
+        for (Policko[] rad : this.policka) {
+            for (Policko policko : rad) {
+                if (policko.getObsahPolicka() == ObsahPolicka.MINA) {
+                    miny.add(policko);
+                }
+            }
+        }
+
+        return miny;
     }
 
     private void generujPolicka(int x, int y, int rozmer, int velkostPolicok) {
@@ -94,18 +145,17 @@ public class Mriezka extends UIPrvok {
         }
     }
 
-    private ArrayList<Policko> vratZoznamMin() {
-        ArrayList<Policko> miny = new ArrayList<>();
+    private boolean jeOdhalenaMina() {
 
         for (Policko[] rad : this.policka) {
             for (Policko policko : rad) {
-                if (policko.getObsahPolicka() == ObsahPolicka.MINA) {
-                    miny.add(policko);
+                if (policko.getObsahPolicka() == ObsahPolicka.MINA && policko.getStavPolicka() == StavPolicka.ZOBRAZENE) {
+                    return true;
                 }
             }
         }
 
-        return miny;
+        return false;
     }
 
     private void generujMiny(int pocet) {
@@ -163,7 +213,6 @@ public class Mriezka extends UIPrvok {
             policko.nastavStav(StavPolicka.ZOBRAZENE);
             //int[] suradnice = this.najdiPolicko(policko);
             int[] suradnice = this.udaje.get(policko).getPozicie();
-            System.out.println(suradnice[0] + "  " + suradnice[1]);
             this.odhalenie(suradnice[0], suradnice[1]);
         }
     }

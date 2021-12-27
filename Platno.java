@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Shape;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -115,6 +116,13 @@ public class Platno {
         this.redraw();
     }
     
+    public void drawString(Object objekt, String text, int x, int y, int velkostPisma) { 
+        this.objekty.remove(objekt);
+        this.objekty.add(objekt);
+        this.tvary.put(objekt, new PopisTextu(text, x, y, velkostPisma));
+        this.redraw();
+    } 
+
     /**
      * Draw a given image onto the canvas.
      * @param  referenceObject  an object to define identity for this image
@@ -252,6 +260,26 @@ public class Platno {
         public void draw(Graphics2D graphic) {
             Platno.this.setForegroundColor(this.farba);
             graphic.fill(this.tvar);
+        }
+    }
+
+    private class PopisTextu implements Platno.IDraw {
+        private String text;
+        private int velkostPisma;
+        private int x;
+        private int y;
+
+        public PopisTextu(String text, int x, int y, int velkostPisma) {
+            this.text = text;
+            this.velkostPisma = velkostPisma;
+            this.x = x;
+            this.y = y;
+        }
+
+        public void draw(Graphics2D graphic) {
+            Platno.this.setForegroundColor("black");   
+            graphic.setFont(new Font("TimesRoman", Font.PLAIN, this.velkostPisma));
+            graphic.drawString(this.text, this.x, this.y);
         }
     }
     
