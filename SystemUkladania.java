@@ -61,7 +61,7 @@ public class SystemUkladania {
             this.ulozUdaje();
         } catch (IOException exception) {
             //Nič
-        };
+        }
     }
 
     public void ulozUdaje() throws IOException {

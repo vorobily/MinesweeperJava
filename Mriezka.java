@@ -19,6 +19,7 @@ public class Mriezka extends UIPrvok {
     private HashMap<Object, UdajeOPolicku> udaje;
     private boolean uzKlikol;
     private int pocetMin;
+    private boolean jeViditelny;
     
 
     public Mriezka(int x, int y, int rozmer, int velkostPolicok, int pocetMin) {
@@ -31,6 +32,7 @@ public class Mriezka extends UIPrvok {
         this.uzKlikol = false;
         this.pocetMin = pocetMin;
         this.generujPolicka(x, y, rozmer, velkostPolicok);
+        this.jeViditelny = true;
     }
 
     public void restart() {
@@ -45,6 +47,10 @@ public class Mriezka extends UIPrvok {
     }
 
     public boolean klik(int x, int y, boolean laveTlacidlo) {
+        if (!this.jeViditelny) {
+            return false;
+        }
+        
         for (Policko[] rad : this.policka) {
             for (Policko policko : rad) {
                 if (policko.obsahujeSuradnice(x, y)) {
@@ -250,5 +256,27 @@ public class Mriezka extends UIPrvok {
         public int[] getPozicie() {
             return this.pozicie;
         }
+    }
+
+    @Override
+    public void skry() {
+        super.skry();
+        for (Policko[] rad : this.policka) {
+            for (Policko policko : rad) {
+                policko.skry();
+            }
+        }
+        this.jeViditelny = false;
+    }
+
+    @Override
+    public void zobraz() {
+        super.zobraz();
+        for (Policko[] rad : this.policka) {
+            for (Policko policko : rad) {
+                policko.zobraz();
+            }
+        }
+        this.jeViditelny = true;
     }
 }

@@ -102,4 +102,20 @@ public class Policko extends UIPrvok {
                 break;
         }
     }
+
+    @Override
+    public void skry() {
+        super.skry();
+        if (this.obrazok != null) {
+            this.obrazok.skry();
+        }
+    }
+
+    @Override
+    public void zobraz() {
+        super.zobraz();
+        if (this.obrazok != null) {
+            this.obrazok.zobraz();
+        }
+    }
 }
