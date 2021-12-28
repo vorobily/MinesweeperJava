@@ -31,12 +31,14 @@ public class Tlacidlo extends UIPrvok {
         return this.identifikator;
     }
 
+    @Override
     public void zobraz() {
         super.zobraz();
         this.text.zobraz();
         this.jeAktivne = true;
     }
 
+    @Override
     public void skry() {
         super.skry();
         this.text.skry();

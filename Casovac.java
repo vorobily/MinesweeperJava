@@ -24,6 +24,11 @@ public class Casovac {
         this.displeje[1].skry();
     }
 
+    public void zobraz() {
+        this.displeje[0].zobraz();
+        this.displeje[1].zobraz();
+    }
+
     public int[] getCas() {
         return new int[] {this.displeje[0].getHodnota(), this.displeje[1].getHodnota()};
     }
@@ -33,7 +38,7 @@ public class Casovac {
         return String.format("%s:%s", Casovac.getHodnotaSNulou(cas[0]), Casovac.getHodnotaSNulou(cas[1]));
     }
 
-    private static String getHodnotaSNulou(int hodnota) {
+    public static String getHodnotaSNulou(int hodnota) {
         if (hodnota < 10) {
             return "0" + String.valueOf(hodnota);
         }

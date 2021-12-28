@@ -3,18 +3,17 @@
  * 
  * @author Peter Hulák
  */
-public class Segment {
-    private Obdlznik segment;
+public class Segment extends UIPrvok {
     
     public Segment(int sirka, int dlzka, int poziciaX, int poziciaY) {
-        this.segment = new Obdlznik(sirka, dlzka, poziciaX, poziciaY);
+        super(sirka, dlzka, poziciaX, poziciaY);
     }
     
     public void prepni(boolean zapnut) {
         if (zapnut) {
-            this.segment.zobraz();
+            super.zobraz();
         } else {
-            this.segment.skry();
+            super.skry();
         }
     }
 }

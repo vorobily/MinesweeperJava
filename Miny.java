@@ -26,7 +26,8 @@ public class Miny {
 
         this.registrujTlacidlo(new Tlacidlo(75, 25, 50, 200, "Reštart", 20, Tlacidla.RESTART));
         this.registrujTlacidlo(new Tlacidlo(95, 25, 50, 250, "Nápoveda", 20, Tlacidla.NAPOVEDA));
-        this.registrujTlacidlo(new Tlacidlo(70, 25, 50, 300, "Koniec", 20, Tlacidla.KONIEC));
+        this.registrujTlacidlo(new Tlacidlo(70, 25, 50, 300, "Rekord", 20, Tlacidla.REKORD));
+        this.registrujTlacidlo(new Tlacidlo(70, 25, 50, 350, "Koniec", 20, Tlacidla.KONIEC));
 
         this.hraSa = true;
         this.manazer.spravujObjekt(this);
@@ -40,6 +41,9 @@ public class Miny {
                 if (vysledok != VysledokHry.PREBIEHA) {
                     this.hraSa = false;
                     this.mriezka.zobrazVsetkyMiny();
+                    if (vysledok == VysledokHry.VYHRAL) { 
+                        this.aktualizujRekord();
+                    }
                     JOptionPane.showMessageDialog(null, this.formatujTextKoncaHry(vysledok), vysledok.getVyhernaSprava(), JOptionPane.INFORMATION_MESSAGE);
                 }
 
@@ -64,8 +68,11 @@ public class Miny {
                 case NAPOVEDA:
                     JOptionPane.showMessageDialog(null, "Lavé tlačidlo myši: Odhalenie políčka\nPravé tlačidlo myši: Položenie vlajky", "Nápoveda", JOptionPane.INFORMATION_MESSAGE);
                     break;
+                case REKORD:
+                    JOptionPane.showMessageDialog(null, this.formatujRekord(), "Rekord", JOptionPane.INFORMATION_MESSAGE);
+                    break;
                 case KONIEC:
-                    System.exit(0);    
+                    System.exit(0);   
             }
 
             return;
@@ -94,5 +101,30 @@ public class Miny {
 
     private String formatujTextKoncaHry(VysledokHry vysledok) {
         return String.format("%s, tvoj čas bol %s", vysledok.getVyhernaSprava(), this.casovac.getFromatovanyCas());
+    }
+
+    private String formatujRekord() {
+        SystemUkladania ins = SystemUkladania.dajInstanciu();
+        int minuty = ins.getUdaj("minuty");
+        int sekundy = ins.getUdaj("sekundy");
+
+        if (minuty < 0 || sekundy < 0) {
+            return "Ešte nemáš žiadny osobný rekord rekord";
+        }
+
+        return String.format("Tvoj osobný rekord je %s:%s", Casovac.getHodnotaSNulou(minuty), Casovac.getHodnotaSNulou(sekundy));
+    }
+
+    private void aktualizujRekord() {
+        SystemUkladania ins = SystemUkladania.dajInstanciu();
+        int[] novyCas = this.casovac.getCas();
+        int minuty = ins.getUdaj("minuty");
+        int sekundy = ins.getUdaj("sekundy");
+
+        if ((novyCas[0] <= minuty && novyCas[1] < sekundy) || (minuty < 0 || sekundy < 0)) {
+            ins.aktualizujUdaj("minuty", novyCas[0]);
+            ins.aktualizujUdaj("sekundy", novyCas[1]);
+            return;
+        }
     }
 }

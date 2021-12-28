@@ -1,4 +1,4 @@
-public class UIPrvok {
+public class UIPrvok implements IUIPrvok {
     private Obdlznik obdlznik;
     
     UIPrvok(int stranaA, int stranaB, int x, int y) {
