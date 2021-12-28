@@ -1,4 +1,4 @@
-public class Casovac {
+public class Casovac implements IUIPrvok {
     private Displej[] displeje;
 
     public Casovac(int polohaX, int polohaY, int velkost) {

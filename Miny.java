@@ -4,6 +4,7 @@ public class Miny {
     private Mriezka mriezka;
     private Casovac casovac;
     private Displej displejMin;
+    private Obrazok pozadie;
 
     private ArrayList<Tlacidlo> tlacidla;
 
@@ -14,6 +15,11 @@ public class Miny {
         //Centrovanie hracej oblasti
         int polohaX = 400 - (rozmer * (velkostPolicok + 1) + 1) / 2;
         int polohaY = 300 - (rozmer * (velkostPolicok + 1) + 1) / 2;
+
+        this.pozadie = new Obrazok("pics/pozadie.png");
+        this.pozadie.zmenVelkost(800, 600);
+        this.pozadie.zmenPolohu(400, 300);
+        this.pozadie.zobraz();
 
         this.mriezka = new Mriezka(polohaX, polohaY, rozmer, velkostPolicok, pocetMin);
         this.casovac = new Casovac(5, 5, 25);

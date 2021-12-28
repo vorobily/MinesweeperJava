@@ -7,7 +7,7 @@ import java.awt.Rectangle;
  * @version 1.0  (15 July 2000)
  */
 
-public class Obdlznik {
+public class Obdlznik implements IUIPrvok {
     private int stranaA;
     private int stranaB;
     private int lavyHornyX;

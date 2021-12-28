@@ -12,7 +12,7 @@ import java.awt.geom.AffineTransform;
  * 
  * @version 1.1
  */
-public class Obrazok {
+public class Obrazok  implements IUIPrvok {
     private boolean jeViditelny;
     
     private int lavyHornyX;
