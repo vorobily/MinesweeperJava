@@ -1,5 +1,6 @@
 public enum Obrazky {
     MINA("pics/mina.png"),
+    MINA2("pics/minaVybuch.png"),
     VLAJKA("pics/vlajka.png"),
     CISLO1("pics/cislica1.png"),
     CISLO2("pics/cislica2.png"),
@@ -13,11 +14,11 @@ public enum Obrazky {
     private String cesta;
 
     public static Obrazky getCislo(int cislo) {
-        if (cislo < 1 || cislo > 8) {
+        if (cislo < 1 || cislo > 8) { //Zobrazuje čísla iba od 1 po 8
             return null;
         }
 
-        return Obrazky.values()[cislo + 1];
+        return Obrazky.values()[cislo + 2];
     }
 
     Obrazky(String cesta) {

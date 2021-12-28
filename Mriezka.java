@@ -50,7 +50,7 @@ public class Mriezka extends UIPrvok {
         if (!this.jeViditelny) {
             return false;
         }
-        
+
         for (Policko[] rad : this.policka) {
             for (Policko policko : rad) {
                 if (policko.obsahujeSuradnice(x, y)) {
@@ -113,7 +113,11 @@ public class Mriezka extends UIPrvok {
 
     public void zobrazVsetkyMiny() {
         for (Policko policko : this.najdiMiny()) {
-            policko.nastavObrazok(Obrazky.MINA);
+            if (policko.getStavPolicka() == StavPolicka.ZOBRAZENE) {
+                policko.nastavObrazok(Obrazky.MINA2);
+            } else {
+                policko.nastavObrazok(Obrazky.MINA);
+            }
         }
     }
 
@@ -198,7 +202,7 @@ public class Mriezka extends UIPrvok {
                 Policko policko = this.policka[x + SMERY[smer][0]][y + SMERY[smer][1]];
                 zoznamPolicok.add(policko);
             } catch (ArrayIndexOutOfBoundsException exception) {
-                //NIČ :)
+                ExceptionHandler.handleException(exception, true);
             }
         }
 

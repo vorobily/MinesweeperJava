@@ -26,7 +26,7 @@ public class SystemUkladania {
         try {
             this.nacitajUdaje();
         } catch (IOException exception) {
-            //Nič
+            ExceptionHandler.handleException(exception, false);
         }
     }
 
@@ -60,7 +60,7 @@ public class SystemUkladania {
         try {
             this.ulozUdaje();
         } catch (IOException exception) {
-            //Nič
+            ExceptionHandler.handleException(exception, false);
         }
     }
 

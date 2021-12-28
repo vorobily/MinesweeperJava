@@ -2,7 +2,6 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 public class Miny {
     private Mriezka mriezka;
-    private Manazer manazer;
     private Casovac casovac;
     private Displej displejMin;
 
@@ -17,20 +16,19 @@ public class Miny {
         int polohaY = 300 - (rozmer * (velkostPolicok + 1) + 1) / 2;
 
         this.mriezka = new Mriezka(polohaX, polohaY, rozmer, velkostPolicok, pocetMin);
-        this.manazer = new Manazer();
         this.casovac = new Casovac(5, 5, 25);
         this.displejMin = new Displej(720, 5, 25, -1);
         this.pocetMin = pocetMin;
         this.aktualizujDisplej(this.pocetMin);
         this.tlacidla = new ArrayList<>();
-
+        
         this.registrujTlacidlo(new Tlacidlo(75, 25, 50, 200, "Reštart", 20, Tlacidla.RESTART));
         this.registrujTlacidlo(new Tlacidlo(95, 25, 50, 250, "Nápoveda", 20, Tlacidla.NAPOVEDA));
-        this.registrujTlacidlo(new Tlacidlo(70, 25, 50, 300, "Rekord", 20, Tlacidla.REKORD));
+        this.registrujTlacidlo(new Tlacidlo(75, 25, 50, 300, "Rekord", 20, Tlacidla.REKORD));
         this.registrujTlacidlo(new Tlacidlo(70, 25, 50, 350, "Koniec", 20, Tlacidla.KONIEC));
-
+        
         this.hraSa = true;
-        this.manazer.spravujObjekt(this);
+        new Manazer(this);
     }
 
     public void klik(int x, int y, boolean laveTlacidlo) {
@@ -109,7 +107,7 @@ public class Miny {
         int sekundy = ins.getUdaj("sekundy");
 
         if (minuty < 0 || sekundy < 0) {
-            return "Ešte nemáš žiadny osobný rekord rekord";
+            return "Ešte nemáš žiadny osobný rekord";
         }
 
         return String.format("Tvoj osobný rekord je %s:%s", Casovac.getHodnotaSNulou(minuty), Casovac.getHodnotaSNulou(sekundy));
