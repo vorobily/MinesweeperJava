@@ -1,6 +1,8 @@
 public enum Udaje {
     MINUTY("minuty", -1),
-    SEKUNDY("sekundy", -1);
+    SEKUNDY("sekundy", -1),
+    MINY("pocetMin", 20),
+    ROZMER("rozmer", 15);
 
     private String string;
     private int pociatocnaHodnota;

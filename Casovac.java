@@ -35,13 +35,6 @@ public class Casovac implements IUIPrvok {
 
     public String getFromatovanyCas() {
         int[] cas = this.getCas();
-        return String.format("%s:%s", Casovac.getHodnotaSNulou(cas[0]), Casovac.getHodnotaSNulou(cas[1]));
-    }
-
-    public static String getHodnotaSNulou(int hodnota) {
-        if (hodnota < 10) {
-            return "0" + String.valueOf(hodnota);
-        }
-        return String.valueOf(hodnota);
+        return String.format("%s:%s", Operacie.getHodnotaSNulou(cas[0]), Operacie.getHodnotaSNulou(cas[1]));
     }
 }

@@ -2,15 +2,14 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class SystemUkladania {
 
     private static SystemUkladania instancia = null;
     
     private static final String SUBOR = "save.txt";
-    private Map<String, Integer> udaje;
+    private LinkedHashMap<String, Integer> udaje;
 
     public static SystemUkladania dajInstanciu() {
         if (SystemUkladania.instancia == null) {
@@ -21,7 +20,7 @@ public class SystemUkladania {
     }
 
     private SystemUkladania() {
-        this.udaje = new HashMap<String, Integer>();
+        this.udaje = new LinkedHashMap<String, Integer>();
 
         try {
             this.nacitajUdaje();

@@ -11,30 +11,42 @@ public class Miny {
     private int pocetMin;
     private boolean hraSa;
     
-    public Miny(int rozmer, int velkostPolicok, int pocetMin) {
-        //Centrovanie hracej oblasti
-        int polohaX = 400 - (rozmer * (velkostPolicok + 1) + 1) / 2;
-        int polohaY = 300 - (rozmer * (velkostPolicok + 1) + 1) / 2;
+    public Miny() {
+        SystemUkladania ins = SystemUkladania.dajInstanciu();
+        this.pocetMin = ins.getUdaj("pocetMin");
+        int rozmer = ins.getUdaj("rozmer");
 
         this.pozadie = new Obrazok(Obrazky.POZADIE.getCesta());
         this.pozadie.zmenVelkost(800, 600);
         this.pozadie.zmenPolohu(400, 300);
         this.pozadie.zobraz();
 
-        this.mriezka = new Mriezka(polohaX, polohaY, rozmer, velkostPolicok, pocetMin);
+        this.vytvorMriezku(rozmer);
         this.casovac = new Casovac(5, 5, 25);
         this.displejMin = new Displej(720, 5, 25, -1);
-        this.pocetMin = pocetMin;
         this.aktualizujDisplej(this.pocetMin);
         this.tlacidla = new ArrayList<>();
         
-        this.registrujTlacidlo(new Tlacidlo(75, 25, 50, 200, "Reštart", 20, Tlacidla.RESTART));
-        this.registrujTlacidlo(new Tlacidlo(95, 25, 50, 250, "Nápoveda", 20, Tlacidla.NAPOVEDA));
-        this.registrujTlacidlo(new Tlacidlo(75, 25, 50, 300, "Rekord", 20, Tlacidla.REKORD));
-        this.registrujTlacidlo(new Tlacidlo(70, 25, 50, 350, "Koniec", 20, Tlacidla.KONIEC));
+        this.registrujTlacidlo(new Tlacidlo(85, 25, 50, 190, "Nová hra", 20, Tlacidla.NOVA));
+        this.registrujTlacidlo(new Tlacidlo(75, 25, 50, 240, "Reštart", 20, Tlacidla.RESTART));
+        this.registrujTlacidlo(new Tlacidlo(95, 25, 50, 290, "Nápoveda", 20, Tlacidla.NAPOVEDA));
+        this.registrujTlacidlo(new Tlacidlo(75, 25, 50, 340, "Rekord", 20, Tlacidla.REKORD));
+        this.registrujTlacidlo(new Tlacidlo(70, 25, 50, 390, "Koniec", 20, Tlacidla.KONIEC));
         
         this.hraSa = true;
         new Manazer(this);
+    }
+
+    private void vytvorMriezku(int rozmer) {
+        if (this.mriezka != null) {
+            this.mriezka.skry();
+        }
+        int velkostPolicok = 350 / (rozmer + 1);
+        //Centrovanie hracej oblasti
+        int polohaX = 400 - (rozmer * (velkostPolicok + 1) + 1) / 2;
+        int polohaY = 300 - (rozmer * (velkostPolicok + 1) + 1) / 2;
+
+        this.mriezka = new Mriezka(polohaX, polohaY, rozmer, velkostPolicok, this.pocetMin);
     }
 
     public void klik(int x, int y, boolean laveTlacidlo) {
@@ -63,6 +75,9 @@ public class Miny {
             }
             
             switch (tlacidlo.getId()) {
+                case NOVA:
+                    this.novaHra();
+                    break;
                 case RESTART:
                     this.casovac.vynuluj();
                     this.hraSa = true;
@@ -116,7 +131,7 @@ public class Miny {
             return "Ešte nemáš žiadny osobný rekord";
         }
 
-        return String.format("Tvoj osobný rekord je %s:%s", Casovac.getHodnotaSNulou(minuty), Casovac.getHodnotaSNulou(sekundy));
+        return String.format("Tvoj osobný rekord je %s:%s", Operacie.getHodnotaSNulou(minuty), Operacie.getHodnotaSNulou(sekundy));
     }
 
     private void aktualizujRekord() {
@@ -130,5 +145,30 @@ public class Miny {
             ins.aktualizujUdaj("sekundy", novyCas[1]);
             return;
         }
+    }
+
+    private void novaHra() {
+        int rozmer = this.vypytajVstup("Zadaj rozmer NxN (0 - 30):", 0, 30);
+        this.pocetMin = this.vypytajVstup(String.format("Zadaj počet mín (0 - %d):", rozmer * rozmer - 2), 0, rozmer * rozmer - 2);
+
+        SystemUkladania.dajInstanciu().aktualizujUdaj("minuty", -1);
+        SystemUkladania.dajInstanciu().aktualizujUdaj("sekundy", -1);
+        SystemUkladania.dajInstanciu().aktualizujUdaj("pocetMin", this.pocetMin);
+        SystemUkladania.dajInstanciu().aktualizujUdaj("rozmer", rozmer);
+
+        this.vytvorMriezku(rozmer);
+        this.hraSa = true;
+        this.aktualizujDisplej(this.pocetMin);
+        this.casovac.vynuluj();
+    }
+
+    private int vypytajVstup(String text, int min, int max) {
+        String zadane;
+
+        do {
+            zadane = JOptionPane.showInputDialog(null, text);
+        } while (!Operacie.jeCislo(zadane) || Integer.parseInt(zadane) < min || Integer.parseInt(zadane) > max);
+
+        return Integer.parseInt(zadane);
     }
 }
