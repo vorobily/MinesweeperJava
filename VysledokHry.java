@@ -1,5 +1,5 @@
 public enum VysledokHry {
-    PREBIEHA(""),
+    PREBIEHA("Hra prebieha"),
     VYHRAL("Vyhral si"),
     PREHRAL("Prehral si");
 

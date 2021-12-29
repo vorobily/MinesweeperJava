@@ -16,7 +16,7 @@ public class Miny {
         int polohaX = 400 - (rozmer * (velkostPolicok + 1) + 1) / 2;
         int polohaY = 300 - (rozmer * (velkostPolicok + 1) + 1) / 2;
 
-        this.pozadie = new Obrazok("pics/pozadie.png");
+        this.pozadie = new Obrazok(Obrazky.POZADIE.getCesta());
         this.pozadie.zmenVelkost(800, 600);
         this.pozadie.zmenPolohu(400, 300);
         this.pozadie.zobraz();

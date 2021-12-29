@@ -9,7 +9,8 @@ public enum Obrazky {
     CISLO5("pics/cislica5.png"),
     CISLO6("pics/cislica6.png"),
     CISLO7("pics/cislica7.png"),
-    CISLO8("pics/cislica8.png");
+    CISLO8("pics/cislica8.png"),
+    POZADIE("pics/pozadie.png");
 
     private String cesta;
 
