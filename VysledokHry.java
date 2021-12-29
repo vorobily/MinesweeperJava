@@ -5,8 +5,8 @@ public enum VysledokHry {
 
     private String vyhernaSprava;
 
-    VysledokHry(String vyhernaSprString) {
-        this.vyhernaSprava = vyhernaSprString;
+    VysledokHry(String vyhernaSpravaString) {
+        this.vyhernaSprava = vyhernaSpravaString;
     }
 
     public String getVyhernaSprava() {
