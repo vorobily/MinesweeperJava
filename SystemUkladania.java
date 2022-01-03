@@ -29,27 +29,6 @@ public class SystemUkladania {
         }
     }
 
-    private void inicializuj() {
-        for (Udaje udaj : Udaje.values()) {
-            this.udaje.put(udaj.getString(), udaj.getPociatocnaHodnota());
-        }
-    }
-
-    private void nacitajUdaje() throws IOException {
-        File subor = new File(SUBOR);
-
-        if (!subor.exists()) {
-            this.inicializuj();
-        }
-        Scanner skener = new Scanner(subor);
-
-        for (Udaje udaj : Udaje.values()) {
-            this.udaje.put(udaj.getString(), skener.nextInt());
-        }
-
-        skener.close();
-    }
-
     public int getUdaj(String udaj) {
         return this.udaje.get(udaj);
     }
@@ -72,5 +51,28 @@ public class SystemUkladania {
         });
 
         zapisovac.close();
+    }
+
+    /* Private */
+
+    private void inicializuj() {
+        for (Udaje udaj : Udaje.values()) {
+            this.udaje.put(udaj.getString(), udaj.getPociatocnaHodnota());
+        }
+    }
+
+    private void nacitajUdaje() throws IOException {
+        File subor = new File(SUBOR);
+
+        if (!subor.exists()) {
+            this.inicializuj();
+        }
+        Scanner skener = new Scanner(subor);
+
+        for (Udaje udaj : Udaje.values()) {
+            this.udaje.put(udaj.getString(), skener.nextInt());
+        }
+
+        skener.close();
     }
 }

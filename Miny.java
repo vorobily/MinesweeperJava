@@ -12,48 +12,40 @@ public class Miny {
     private boolean hraSa;
     
     public Miny() {
+        /* Načítanie zo systému ukládania */
         SystemUkladania ins = SystemUkladania.dajInstanciu();
         this.pocetMin = ins.getUdaj("pocetMin");
         int rozmer = ins.getUdaj("rozmer");
 
+        /* Pozadie */
         this.pozadie = new Obrazok(Obrazky.POZADIE.getCesta());
         this.pozadie.zmenVelkost(800, 600);
         this.pozadie.zmenPolohu(400, 300);
         this.pozadie.zobraz();
 
+        /* Rozhranie */
         this.vytvorMriezku(rozmer);
         this.casovac = new Casovac(5, 5, 25);
         this.displejMin = new Displej(720, 5, 25, -1);
         this.aktualizujDisplej(this.pocetMin);
         this.tlacidla = new ArrayList<>();
-        
-        this.registrujTlacidlo(new Tlacidlo(85, 25, 50, 190, "Nová hra", 20, Tlacidla.NOVA));
-        this.registrujTlacidlo(new Tlacidlo(75, 25, 50, 240, "Reštart", 20, Tlacidla.RESTART));
-        this.registrujTlacidlo(new Tlacidlo(95, 25, 50, 290, "Nápoveda", 20, Tlacidla.NAPOVEDA));
-        this.registrujTlacidlo(new Tlacidlo(75, 25, 50, 340, "Rekord", 20, Tlacidla.REKORD));
-        this.registrujTlacidlo(new Tlacidlo(70, 25, 50, 390, "Koniec", 20, Tlacidla.KONIEC));
-        
+        this.generujTlacidla();
+
         this.hraSa = true;
         new Manazer(this);
     }
 
-    private void vytvorMriezku(int rozmer) {
-        if (this.mriezka != null) {
-            this.mriezka.skry();
+    public void tik() { //Volá sa každú sekundu
+        if (this.hraSa) {
+            this.casovac.pridaj();
         }
-        int velkostPolicok = 350 / (rozmer + 1);
-        //Centrovanie hracej oblasti
-        int polohaX = 400 - (rozmer * (velkostPolicok + 1) + 1) / 2;
-        int polohaY = 300 - (rozmer * (velkostPolicok + 1) + 1) / 2;
-
-        this.mriezka = new Mriezka(polohaX, polohaY, rozmer, velkostPolicok, this.pocetMin);
     }
-
+    
     public void klik(int x, int y, boolean laveTlacidlo) {
         if (this.hraSa) { //Ak prebieha hra
             if (this.mriezka.klik(x, y, laveTlacidlo)) { //Ak klikol na políčko
                 VysledokHry vysledok = this.mriezka.skoncilaHra();
-
+                
                 if (vysledok != VysledokHry.PREBIEHA) {
                     this.hraSa = false;
                     this.mriezka.zobrazVsetkyMiny();
@@ -62,13 +54,13 @@ public class Miny {
                     }
                     JOptionPane.showMessageDialog(null, this.formatujTextKoncaHry(vysledok), vysledok.getVyhernaSprava(), JOptionPane.INFORMATION_MESSAGE);
                 }
-
+                
                 int zostava = this.mriezka.getPocetMin() - this.mriezka.getPocetVlajok();
                 this.aktualizujDisplej(zostava);
                 return;
             }
         }
-
+        
         for (Tlacidlo tlacidlo : this.tlacidla) {
             if (!tlacidlo.boloStlacene(x, y)) {
                 continue;
@@ -76,27 +68,48 @@ public class Miny {
             
             switch (tlacidlo.getId()) {
                 case NOVA:
-                    this.novaHra();
-                    break;
+                this.novaHra();
+                break;
                 case RESTART:
-                    this.casovac.vynuluj();
-                    this.hraSa = true;
-                    this.mriezka.restart();
-                    this.aktualizujDisplej(this.pocetMin);
-                    break;
+                this.casovac.vynuluj();
+                this.hraSa = true;
+                this.mriezka.restart();
+                this.aktualizujDisplej(this.pocetMin);
+                break;
                 case NAPOVEDA:
-                    JOptionPane.showMessageDialog(null, "Lavé tlačidlo myši: Odhalenie políčka\nPravé tlačidlo myši: Položenie vlajky", "Nápoveda", JOptionPane.INFORMATION_MESSAGE);
-                    break;
+                JOptionPane.showMessageDialog(null, "Lavé tlačidlo myši: Odhalenie políčka\nPravé tlačidlo myši: Položenie vlajky", "Nápoveda", JOptionPane.INFORMATION_MESSAGE);
+                break;
                 case REKORD:
-                    JOptionPane.showMessageDialog(null, this.formatujRekord(), "Rekord", JOptionPane.INFORMATION_MESSAGE);
-                    break;
+                JOptionPane.showMessageDialog(null, this.formatujRekord(), "Rekord", JOptionPane.INFORMATION_MESSAGE);
+                break;
                 case KONIEC:
-                    System.exit(0);   
+                System.exit(0);   
             }
-
+            
             return;
         }
     }
+
+    /* Private */
+
+    private void generujTlacidla() {
+        for (int i = 0; i < Tlacidla.values().length; ++i) {
+            this.registrujTlacidlo(new Tlacidlo(Tlacidla.values()[i].getSirka(), 25, 50, 190 + (50 * i), Tlacidla.values()[i].getText(), 20, Tlacidla.values()[i]));
+        }
+    }
+    
+    private void vytvorMriezku(int rozmer) {
+        if (this.mriezka != null) {
+            this.mriezka.skry();
+        }
+        int velkostPolicok = 350 / (rozmer + 1);
+        //Centrovanie hracej oblasti
+        int polohaX = 400 - (rozmer * (velkostPolicok + 1) + 1) / 2;
+        int polohaY = 300 - (rozmer * (velkostPolicok + 1) + 1) / 2;
+        
+        this.mriezka = new Mriezka(polohaX, polohaY, rozmer, velkostPolicok, this.pocetMin);
+    }
+
 
     private void aktualizujDisplej(int zostava) { //Stará sa o správne zobrazovanie
         if (zostava > 99) {
@@ -105,12 +118,6 @@ public class Miny {
             this.displejMin.zobraz(0);
         } else {
             this.displejMin.zobraz(zostava);
-        }
-    }
-
-    public void tik() { //Volá sa každú sekundu
-        if (this.hraSa) {
-            this.casovac.pridaj();
         }
     }
 

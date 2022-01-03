@@ -35,6 +35,28 @@ public class Mriezka extends UIPrvok {
         this.jeViditelny = true;
     }
 
+    @Override
+    public void skry() {
+        super.skry();
+        for (Policko[] rad : this.policka) {
+            for (Policko policko : rad) {
+                policko.skry();
+            }
+        }
+        this.jeViditelny = false;
+    }
+
+    @Override
+    public void zobraz() {
+        super.zobraz();
+        for (Policko[] rad : this.policka) {
+            for (Policko policko : rad) {
+                policko.zobraz();
+            }
+        }
+        this.jeViditelny = true;
+    }
+
     public void restart() {
         for (Policko[] rad : this.policka) {
             for (Policko policko : rad) {
@@ -245,7 +267,6 @@ public class Mriezka extends UIPrvok {
         return null;
     }
     */
-    
 
     private class UdajeOPolicku {
         private int[] pozicie;
@@ -260,27 +281,5 @@ public class Mriezka extends UIPrvok {
         public int[] getPozicie() {
             return this.pozicie;
         }
-    }
-
-    @Override
-    public void skry() {
-        super.skry();
-        for (Policko[] rad : this.policka) {
-            for (Policko policko : rad) {
-                policko.skry();
-            }
-        }
-        this.jeViditelny = false;
-    }
-
-    @Override
-    public void zobraz() {
-        super.zobraz();
-        for (Policko[] rad : this.policka) {
-            for (Policko policko : rad) {
-                policko.zobraz();
-            }
-        }
-        this.jeViditelny = true;
     }
 }

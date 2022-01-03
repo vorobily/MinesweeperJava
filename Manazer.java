@@ -8,10 +8,8 @@ Upravená trieda manažér z hodín
 */
 
 public class Manazer {
-    private static final long TICK_LENGTH = 1000000000;
-
     private Miny miny;
-    private long oldTick;
+    private long dalsiTick;
     
     public Manazer(Miny miny) {
         this.miny = miny;
@@ -23,10 +21,9 @@ public class Manazer {
 
     private class ManazerCasovaca implements ActionListener {
         public void actionPerformed(ActionEvent event) {
-            long newTick = System.nanoTime();
-            if (newTick - Manazer.this.oldTick >= Manazer.TICK_LENGTH || newTick < Manazer.TICK_LENGTH) {
-                Manazer.this.oldTick = (newTick / Manazer.TICK_LENGTH) * Manazer.TICK_LENGTH;
+            if (Manazer.this.dalsiTick <= System.nanoTime()) {
                 Manazer.this.miny.tik();
+                Manazer.this.dalsiTick = System.nanoTime() + 1000000000;
             }
         }
     }
