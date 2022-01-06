@@ -15,22 +15,6 @@ public class Text {
         this.nakresli();
     }
 
-    public void nastavText(String text) {
-        this.text = text;
-        this.nakresli();
-    }   
-    
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.nakresli();
-    }
-    
-    public void setVelkostTextu(int velkostTextu) {
-        this.velkostTextu = velkostTextu;
-        this.nakresli();
-    }
-
     public void zobraz() {
         this.jeViditelny = true;
         this.nakresli();
@@ -47,7 +31,7 @@ public class Text {
         }
     }
        
-    public void nakresli() {
+    private void nakresli() {
         if (this.jeViditelny) {
             Platno.dajPlatno().draw(this, this.text, this.x, this.y, this.velkostTextu);
         }

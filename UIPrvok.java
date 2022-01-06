@@ -1,7 +1,7 @@
-public class UIPrvok implements IUIPrvok {
+public abstract class UIPrvok implements IUIPrvok {
     private Obdlznik obdlznik;
     
-    UIPrvok(int stranaA, int stranaB, int x, int y) {
+    public UIPrvok(int stranaA, int stranaB, int x, int y) {
         this.obdlznik = new Obdlznik(stranaA, stranaB, x, y);
     }
 

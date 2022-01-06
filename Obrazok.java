@@ -58,90 +58,6 @@ public class Obrazok  implements IUIPrvok {
         this.zmaz();
         this.jeViditelny = false;
     }                     
-    
-    /**
-     * (Obrázok) Posuň sa vpravo o pevnú dĺžku.
-     */
-    public void posunVpravo() {
-        this.posunVodorovne(20);
-    }
-
-    /**
-     * (Obrázok) Posuň sa vľavo o pevnú dĺžku.
-     */
-    public void posunVlavo() {
-        this.posunVodorovne(-20);
-    }
-
-    /**
-     * (Obrázok) Posuň sa hore o pevnú dĺžku.
-     */
-    public void posunHore() {
-        this.posunZvisle(-20);
-    }
-
-    /**
-     * (Obrázok) Posuň sa dole o pevnú dĺžku.
-     */
-    public void posunDole() {
-        this.posunZvisle(20);
-    }
-
-    /**
-     * (Obrázok) Posuň sa vodorovne o dĺžku danú parametrom.
-     */
-    public void posunVodorovne(int vzdialenost) {
-        this.zmaz();
-        this.lavyHornyX += vzdialenost;
-        this.nakresli();
-    }
-
-    /**
-     * (Obrázok) Posuň sa zvisle o dĺžku danú parametrom.
-     */
-    public void posunZvisle(int vzdialenost) {
-        this.zmaz();
-        this.lavyHornyY += vzdialenost;
-        this.nakresli();
-    }
-
-    /**
-     * (Obrázok) Posuň sa pomaly vodorovne o dĺžku danú parametrom.
-     */
-    public void pomalyPosunVodorovne(int vzdialenost) {
-        int delta;
-
-        if (vzdialenost < 0) {
-            delta = -1;
-            vzdialenost = -vzdialenost;
-        } else  {
-            delta = 1;
-        }
-
-        for (int i = 0; i < vzdialenost; i++) {
-            this.lavyHornyX += delta;
-            this.nakresli();
-        }
-    }
-
-    /**
-     * (Obrázok) Posuň sa pomaly vodorovne o dĺžku danú parametrom.
-     */
-    public void pomalyPosunZvisle(int vzdialenost) {
-        int delta;
-
-        if (vzdialenost < 0) {
-            delta = -1;
-            vzdialenost = -vzdialenost;
-        } else {
-            delta = 1;
-        }
-
-        for (int i = 0; i < vzdialenost; i++) {
-            this.lavyHornyY += delta;
-            this.nakresli();
-        }
-    }
            
     /**
      * (Obrázok) Zmení obrázok.
@@ -169,19 +85,7 @@ public class Obrazok  implements IUIPrvok {
         if (nakresleny) {
             this.nakresli();
         }
-    }
-    
-    /**
-     * (Obrázok) Zmeň uhol natočenia obrázku podľa parametra. Sever = 0.
-     */
-    public void zmenUhol(double uhol) {
-        boolean nakresleny = this.jeViditelny;
-        this.zmaz();
-        this.uhol = uhol;
-        if (nakresleny) {
-            this.nakresli();
-        }
-    }  
+    } 
     
     /**
      * (Obrázok) Zmeň veľkosť obrázku podľa parametrov. .

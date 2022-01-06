@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -41,7 +40,7 @@ public class Platno {
      */
     public static Platno dajPlatno() {
         if (Platno.platnoSingleton == null) {
-            Platno.platnoSingleton = new Platno("Míny", 800, 600, Color.white);
+            Platno.platnoSingleton = new Platno("Míny", Miny.SIRKA, Miny.VYSKA, Color.white);
         }
         Platno.platnoSingleton.setVisible(true);
         return Platno.platnoSingleton;
@@ -176,20 +175,6 @@ public class Platno {
     }
 
     /**
-     * Wait for a specified number of milliseconds before finishing.
-     * This provides an easy way to specify a small delay which can be
-     * used when producing animations.
-     * @param  milliseconds  the number 
-     */
-    public void wait(int milisekundy) {
-        try {
-            Thread.sleep(milisekundy);
-        } catch (Exception e) {
-            System.out.println("Cakanie sa nepodarilo");
-        }
-    }
-
-    /**
      * * Redraw all shapes currently on the Canvas.
      */
     private void redraw() {
@@ -209,10 +194,6 @@ public class Platno {
         Dimension size = this.canvas.getSize();
         this.graphic.fill(new Rectangle(0, 0, size.width, size.height));
         this.graphic.setColor(original);
-    }
-    
-    public void addKeyListener(KeyListener listener) {
-        this.frame.addKeyListener(listener);
     }
     
     public void addMouseListener(MouseListener listener) {

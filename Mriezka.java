@@ -143,6 +143,8 @@ public class Mriezka extends UIPrvok {
         }
     }
 
+    /* Private */
+
     private ArrayList<Policko> najdiMiny() {
         ArrayList<Policko> miny = new ArrayList<>();
 

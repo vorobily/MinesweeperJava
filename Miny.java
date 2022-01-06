@@ -1,6 +1,9 @@
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
 public class Miny {
+    public static final int VYSKA = 600;
+    public static final int SIRKA = 800;
+
     private Mriezka mriezka;
     private Casovac casovac;
     private Displej displejMin;
@@ -19,8 +22,8 @@ public class Miny {
 
         /* Pozadie */
         this.pozadie = new Obrazok(Obrazky.POZADIE.getCesta());
-        this.pozadie.zmenVelkost(800, 600);
-        this.pozadie.zmenPolohu(400, 300);
+        this.pozadie.zmenVelkost(Miny.SIRKA, Miny.VYSKA);
+        this.pozadie.zmenPolohu(Miny.SIRKA / 2, Miny.VYSKA / 2);
         this.pozadie.zobraz();
 
         /* Rozhranie */
@@ -66,31 +69,35 @@ public class Miny {
                 continue;
             }
             
-            switch (tlacidlo.getId()) {
-                case NOVA:
-                this.novaHra();
-                break;
-                case RESTART:
-                this.casovac.vynuluj();
-                this.hraSa = true;
-                this.mriezka.restart();
-                this.aktualizujDisplej(this.pocetMin);
-                break;
-                case NAPOVEDA:
-                JOptionPane.showMessageDialog(null, "Lavé tlačidlo myši: Odhalenie políčka\nPravé tlačidlo myši: Položenie vlajky", "Nápoveda", JOptionPane.INFORMATION_MESSAGE);
-                break;
-                case REKORD:
-                JOptionPane.showMessageDialog(null, this.formatujRekord(), "Rekord", JOptionPane.INFORMATION_MESSAGE);
-                break;
-                case KONIEC:
-                System.exit(0);   
-            }
-            
+            this.handleTlacidlo(tlacidlo.getId());
+
             return;
         }
     }
 
     /* Private */
+
+    private void handleTlacidlo(Tlacidla tlacidlo) {
+        switch (tlacidlo) {
+            case NOVA:
+                this.novaHra();
+                break;
+            case RESTART:
+                this.casovac.vynuluj();
+                this.hraSa = true;
+                this.mriezka.restart();
+                this.aktualizujDisplej(this.pocetMin);
+                break;
+            case NAPOVEDA:
+                JOptionPane.showMessageDialog(null, "Lavé tlačidlo myši: Odhalenie políčka\nPravé tlačidlo myši: Položenie vlajky", "Nápoveda", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            case REKORD:
+                JOptionPane.showMessageDialog(null, this.formatujRekord(), "Rekord", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            case KONIEC:
+                System.exit(0);   
+        }
+    }
 
     private void generujTlacidla() {
         for (int i = 0; i < Tlacidla.values().length; ++i) {
@@ -104,8 +111,8 @@ public class Miny {
         }
         int velkostPolicok = 350 / (rozmer + 1);
         //Centrovanie hracej oblasti
-        int polohaX = 400 - (rozmer * (velkostPolicok + 1) + 1) / 2;
-        int polohaY = 300 - (rozmer * (velkostPolicok + 1) + 1) / 2;
+        int polohaX = Miny.SIRKA / 2 - (rozmer * (velkostPolicok + 1) + 1) / 2;
+        int polohaY = Miny.VYSKA / 2 - (rozmer * (velkostPolicok + 1) + 1) / 2;
         
         this.mriezka = new Mriezka(polohaX, polohaY, rozmer, velkostPolicok, this.pocetMin);
     }
