@@ -163,7 +163,7 @@ public class Miny {
 
     private void novaHra() {
         int rozmer = this.vypytajVstup("Zadaj rozmer NxN (2 - 30):", 2, 30);
-        this.pocetMin = this.vypytajVstup(String.format("Zadaj počet mín (0 - %d):", rozmer * rozmer - 2), 0, rozmer * rozmer - 2);
+        this.pocetMin = this.vypytajVstup(String.format("Zadaj počet mín (1 - %d):", rozmer * rozmer - 2), 1, rozmer * rozmer - 2);
 
         SystemUkladania.dajInstanciu().aktualizujUdaj("minuty", -1);
         SystemUkladania.dajInstanciu().aktualizujUdaj("sekundy", -1);
