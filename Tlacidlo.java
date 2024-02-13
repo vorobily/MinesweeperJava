@@ -1,4 +1,4 @@
-public class Tlacidlo extends UIPrvok {
+public class Tlacidlo extends UIPrvek {
     private Text text;
     private int x;
     private int y;
@@ -7,9 +7,9 @@ public class Tlacidlo extends UIPrvok {
     private Tlacidla identifikator;
     private boolean jeAktivne;
 
-    public Tlacidlo (int stranaA, int stranaB, int x, int y, String text, int velkostTextu, Tlacidla identifikator)  {
+    public Tlacidlo (int stranaA, int stranaB, int x, int y, String text, int velikostTextu, Tlacidla identifikator)  {
         super(stranaA, stranaB, x, y);
-        super.zmenFarbu("gray");
+        super.zmenBarvu("gray");
         super.zobraz();
 
         this.x = x;
@@ -20,10 +20,10 @@ public class Tlacidlo extends UIPrvok {
 
         this.identifikator = identifikator;
 
-        this.text = new Text(text, x + velkostTextu / 5, y + velkostTextu, velkostTextu);
+        this.text = new Text(text, x + velikostTextu / 5, y + velikostTextu, velikostTextu);
     }
 
-    public boolean boloStlacene(int x, int y) {
+    public boolean byloStlaceno(int x, int y) {
         return x >= this.x && (this.x + this.stranaA) > x && y >= this.y && (this.y + this.stranaB) > y && this.jeAktivne;
     }
 
@@ -39,9 +39,9 @@ public class Tlacidlo extends UIPrvok {
     }
 
     @Override
-    public void skry() {
-        super.skry();
-        this.text.skry();
+    public void skryt() {
+        super.skryt();
+        this.text.skryt();
         this.jeAktivne = false;
     }
 }

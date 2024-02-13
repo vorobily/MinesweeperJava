@@ -1,20 +1,20 @@
-public class Policko extends UIPrvok {
+public class Policko extends UIPrvek {
     private ObsahPolicka obsahPolicka;
     private StavPolicka stavPolicka;
-    private Obrazok obrazok;
+    private Obrazek obrazek;
 
-    private int velkostStrany;
+    private int velikostStrany;
     private int x;
     private int y;
     private int minyVOkoli;
     
-    public Policko(int velkostStrany, int x, int y) {
-        super(velkostStrany, velkostStrany, x, y);
+    public Policko(int velikostStrany, int x, int y) {
+        super(velikostStrany, velikostStrany, x, y);
 
         this.obsahPolicka = ObsahPolicka.VOLNE;
-        this.nastavStav(StavPolicka.SKYRTE);
+        this.nastavStav(StavPolicka.SKRYTE);
 
-        this.velkostStrany = velkostStrany;
+        this.velikostStrany = velikostStrany;
         this.x = x;
         this.y = y;
         this.minyVOkoli = 0;
@@ -22,8 +22,8 @@ public class Policko extends UIPrvok {
         super.zobraz();
     }
 
-    public boolean obsahujeSuradnice(int x, int y) {
-        return x >= this.x && (this.x + this.velkostStrany) > x && y >= this.y && (this.y + this.velkostStrany) > y;
+    public boolean obsahujesouradnice(int x, int y) {
+        return x >= this.x && (this.x + this.velikostStrany) > x && y >= this.y && (this.y + this.velikostStrany) > y;
     }
 
     public ObsahPolicka getObsahPolicka() {
@@ -38,34 +38,34 @@ public class Policko extends UIPrvok {
         this.obsahPolicka = obsahPolicka;
     }
 
-    public void nastavObrazok(Obrazky obrazky) {
-        if (this.obrazok != null) {
-            this.obrazok.skry();
+    public void nastavobrazek(Obrazky obrazky) {
+        if (this.obrazek != null) {
+            this.obrazek.skryt();
         }
 
         if (obrazky == null) {
             return;
         }
         
-        this.obrazok = new Obrazok(obrazky.getCesta());
-        this.obrazok.zmenVelkost(this.velkostStrany, this.velkostStrany);
-        this.obrazok.zmenPolohu(this.x + this.velkostStrany / 2, this.y + this.velkostStrany / 2);
-        this.obrazok.zobraz();
+        this.obrazek = new Obrazek(obrazky.getCesta());
+        this.obrazek.zmenvelikost(this.velikostStrany, this.velikostStrany);
+        this.obrazek.zmenPolohu(this.x + this.velikostStrany / 2, this.y + this.velikostStrany / 2);
+        this.obrazek.zobraz();
     }
 
     public void nastavCislo(int cislo) {
-        this.nastavObrazok(Obrazky.getCislo(cislo));
+        this.nastavobrazek(Obrazky.getCislo(cislo));
     }
 
-    public void klik(boolean laveTlacidlo) {
-        if (!laveTlacidlo) {
+    public void klik(boolean leveTlacidlo) {
+        if (!leveTlacidlo) {
             if (this.stavPolicka != StavPolicka.ZOBRAZENE) {
-                this.nastavStav((this.stavPolicka == StavPolicka.SKYRTE) ? StavPolicka.VLAJKA : StavPolicka.SKYRTE);
+                this.nastavStav((this.stavPolicka == StavPolicka.SKRYTE) ? StavPolicka.VLAJKA : StavPolicka.SKRYTE);
             }
             return;
         }
 
-        if (this.stavPolicka == StavPolicka.SKYRTE) {
+        if (this.stavPolicka == StavPolicka.SKRYTE) {
             this.nastavStav(StavPolicka.ZOBRAZENE);
         }
     }
@@ -79,23 +79,23 @@ public class Policko extends UIPrvok {
     }
 
     public void nastavStav(StavPolicka stavPolicka) {
-        if (this.obrazok != null) {
-            this.obrazok.skry();
-            this.obrazok = null;
+        if (this.obrazek != null) {
+            this.obrazek.skryt();
+            this.obrazek = null;
         }
 
         this.stavPolicka = stavPolicka;
-        super.zmenFarbu(stavPolicka.getFarba());
+        super.zmenBarvu(stavPolicka.getbarva());
 
         switch (stavPolicka) {
-            case SKYRTE:
+            case SKRYTE:
                 break;
             case VLAJKA:
-                this.nastavObrazok(Obrazky.VLAJKA);
+                this.nastavobrazek(Obrazky.VLAJKA);
                 break;
             default:
                 if (this.obsahPolicka == ObsahPolicka.MINA) {
-                    this.nastavObrazok(Obrazky.MINA);
+                    this.nastavobrazek(Obrazky.MINA);
                 } else {
                     this.nastavCislo(this.minyVOkoli);
                 }
@@ -104,18 +104,18 @@ public class Policko extends UIPrvok {
     }
 
     @Override
-    public void skry() {
-        super.skry();
-        if (this.obrazok != null) {
-            this.obrazok.skry();
+    public void skryt() {
+        super.skryt();
+        if (this.obrazek != null) {
+            this.obrazek.skryt();
         }
     }
 
     @Override
     public void zobraz() {
         super.zobraz();
-        if (this.obrazok != null) {
-            this.obrazok.zobraz();
+        if (this.obrazek != null) {
+            this.obrazek.zobraz();
         }
     }
 }

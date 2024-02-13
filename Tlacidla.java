@@ -1,9 +1,8 @@
 public enum Tlacidla {
     NOVA(85, "Nová hra"),
-    RESTART(75, "Reštart"),
+    RESTART(75, "Restart"),
     NAPOVEDA(95, "Nápoveda"),
-    REKORD(75, "Rekord"),
-    KONIEC(70, "Koniec");
+    KONEC(70, "Konec");
 
     private int sirka;
     private String text;

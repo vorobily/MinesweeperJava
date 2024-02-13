@@ -1,15 +1,15 @@
 public enum StavPolicka {
-    SKYRTE("gray"),
+    SKRYTE("gray"),
     VLAJKA("gray"),
     ZOBRAZENE("white");
 
-    private String farba;
+    private String barva;
 
-    StavPolicka(String farba) {
-        this.farba = farba;
+    StavPolicka(String barva) {
+        this.barva = barva;
     }
 
-    public String getFarba() {
-        return this.farba;
+    public String getbarva() {
+        return this.barva;
     }
 }

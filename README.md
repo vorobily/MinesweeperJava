@@ -1,3 +1,0 @@
-# Minesweeper
-
-First semestral work

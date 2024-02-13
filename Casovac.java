@@ -1,26 +1,26 @@
-public class Casovac implements IUIPrvok {
+public class Casovac implements IUIPrvek {
     private Displej[] displeje;
     private Segment[] segmenty;
 
-    public Casovac(int polohaX, int polohaY, int velkost) {
+    public Casovac(int polohaX, int polohaY, int velikost) {
         this.displeje = new Displej[2];
         this.segmenty = new Segment[2];
 
         /* Čísla */
-        this.displeje[0] = new Displej(polohaX, polohaY, velkost, -1);
-        this.displeje[1] = new Displej(polohaX + velkost / 5 * 18, polohaY, velkost, 60);
+        this.displeje[0] = new Displej(polohaX, polohaY, velikost, -1);
+        this.displeje[1] = new Displej(polohaX + velikost / 5 * 18, polohaY, velikost, 60);
 
-        /* Bodky */
-        this.segmenty[0] = new Segment(velkost / 5, velkost / 5, polohaX + velkost / 5 * 16, polohaY + velkost / 5 * 4);
-        this.segmenty[1] = new Segment(velkost / 5, velkost / 5, polohaX + velkost / 5 * 16, polohaY + velkost / 5 * 8);
+        /* Body */
+        this.segmenty[0] = new Segment(velikost / 5, velikost / 5, polohaX + velikost / 5 * 16, polohaY + velikost / 5 * 4);
+        this.segmenty[1] = new Segment(velikost / 5, velikost / 5, polohaX + velikost / 5 * 16, polohaY + velikost / 5 * 8);
 
         this.segmenty[0].zobraz();
         this.segmenty[1].zobraz();
     }
 
-    public void pridaj() {
-        if (this.displeje[1].pridaj()) {
-            this.displeje[0].pridaj();
+    public void pridej() {
+        if (this.displeje[1].pridej()) {
+            this.displeje[0].pridej();
         }
     }
 
@@ -29,12 +29,12 @@ public class Casovac implements IUIPrvok {
         this.displeje[1].zobraz(0);
     }
     
-    public void skry() {
-        this.displeje[0].skry();
-        this.displeje[1].skry();
+    public void skryt() {
+        this.displeje[0].skryt();
+        this.displeje[1].skryt();
 
-        this.segmenty[0].skry();
-        this.segmenty[1].skry();
+        this.segmenty[0].skryt();
+        this.segmenty[1].skryt();
     }
 
     public void zobraz() {
@@ -49,8 +49,8 @@ public class Casovac implements IUIPrvok {
         return new int[] {this.displeje[0].getHodnota(), this.displeje[1].getHodnota()};
     }
 
-    public String getFromatovanyCas() {
+    public String getFormatovanyCas() {
         int[] cas = this.getCas();
-        return String.format("%s:%s", Operacie.getHodnotaSNulou(cas[0]), Operacie.getHodnotaSNulou(cas[1]));
+        return String.format("%s:%s", Operace.getHodnotaSNulou(cas[0]), Operace.getHodnotaSNulou(cas[1]));
     }
 }

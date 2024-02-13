@@ -1,14 +1,9 @@
-/**
- * Segmentovka
- * 
- * @author Peter Hulák
- */
 public class Segmentovka {
     private Segment[] segmenty;
     
-    public Segmentovka(int poziciaX, int poziciaY, int velkost) {
+    public Segmentovka(int poziceX, int poziceY, int velikost) {
         this.segmenty = new Segment[7];
-        this.generujSegmenty(poziciaX, poziciaY, velkost);
+        this.generujSegmenty(poziceX, poziceY, velikost);
     }
     
     public void zobraz(int cislo) {
@@ -48,24 +43,22 @@ public class Segmentovka {
         }
     }
 
-    /* Private */
-
-    private void generujSegmenty(int poziciaX, int poziciaY, int velkost) {
-        int sirka = velkost;
-        int vyska = velkost / 5;
+    private void generujSegmenty(int poziceX, int poziceY, int velikost) {
+        int sirka = velikost;
+        int vyska = velikost / 5;
         
-        this.segmenty[0] = new Segment(sirka, vyska, vyska + poziciaX, poziciaY);
-        this.segmenty[1] = new Segment(vyska, sirka, vyska + sirka + poziciaX, vyska + poziciaY);
-        this.segmenty[2] = new Segment(vyska, sirka, vyska + sirka + poziciaX, 2 * vyska + sirka + poziciaY);
-        this.segmenty[3] = new Segment(sirka, vyska, vyska + poziciaX, 2 * vyska + 2 * sirka + poziciaY);
-        this.segmenty[4] = new Segment(vyska, sirka, poziciaX, 2 * vyska + sirka + poziciaY);
-        this.segmenty[5] = new Segment(vyska, sirka, poziciaX, vyska + poziciaY);
-        this.segmenty[6] = new Segment(sirka, vyska, vyska + poziciaX, vyska + sirka + poziciaY);
+        this.segmenty[0] = new Segment(sirka, vyska, vyska + poziceX, poziceY);
+        this.segmenty[1] = new Segment(vyska, sirka, vyska + sirka + poziceX, vyska + poziceY);
+        this.segmenty[2] = new Segment(vyska, sirka, vyska + sirka + poziceX, 2 * vyska + sirka + poziceY);
+        this.segmenty[3] = new Segment(sirka, vyska, vyska + poziceX, 2 * vyska + 2 * sirka + poziceY);
+        this.segmenty[4] = new Segment(vyska, sirka, poziceX, 2 * vyska + sirka + poziceY);
+        this.segmenty[5] = new Segment(vyska, sirka, poziceX, vyska + poziceY);
+        this.segmenty[6] = new Segment(sirka, vyska, vyska + poziceX, vyska + sirka + poziceY);
     }
     
-    private void zobrazKonkretneSegmenty(boolean[] zoznamSegmentov) {
-        for (int i = 0; i < zoznamSegmentov.length; ++i) {
-            this.segmenty[i].prepni(zoznamSegmentov[i]);
+    private void zobrazKonkretneSegmenty(boolean[] zaznamSegmentov) {
+        for (int i = 0; i < zaznamSegmentov.length; ++i) {
+            this.segmenty[i].prepni(zaznamSegmentov[i]);
         }
     }
 }

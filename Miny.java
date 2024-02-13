@@ -1,71 +1,85 @@
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
 public class Miny {
     public static final int VYSKA = 600;
     public static final int SIRKA = 800;
 
-    private Mriezka mriezka;
+    private Mrizka mrizka; // resetka
     private Casovac casovac;
     private Displej displejMin;
-    private Obrazok pozadie;
+    private Obrazek pozadi;
 
     private ArrayList<Tlacidlo> tlacidla;
 
+    private boolean hraProbiha;
+
     private int pocetMin;
-    private boolean hraSa;
-    
+    private int rozmer;
+    private String jmeno;
+    private String cas;
+    private String result;
+
+    static final String jdbcURL = "jdbc:postgresql://localhost:5432/***";
+    static final String username = "***";
+    static final String password = "***";
+
     public Miny() {
-        /* Načítanie zo systému ukládania */
-        SystemUkladania ins = SystemUkladania.dajInstanciu();
-        this.pocetMin = ins.getUdaj("pocetMin");
-        int rozmer = ins.getUdaj("rozmer");
+        this.pocetMin = Udaje.MINY.getPocatecniHodnota();
+        this.rozmer = Udaje.ROZMER.getPocatecniHodnota();
 
-        /* Pozadie */
-        this.pozadie = new Obrazok(Obrazky.POZADIE.getCesta());
-        this.pozadie.zmenVelkost(Miny.SIRKA, Miny.VYSKA);
-        this.pozadie.zmenPolohu(Miny.SIRKA / 2, Miny.VYSKA / 2);
-        this.pozadie.zobraz();
+        /* Pozadi */
+        this.pozadi = new Obrazek(Obrazky.POZADI.getCesta());
+        this.pozadi.zmenvelikost(Miny.SIRKA, Miny.VYSKA);
+        this.pozadi.zmenPolohu(Miny.SIRKA / 2, Miny.VYSKA / 2);
+        this.pozadi.zobraz();
 
-        /* Rozhranie */
-        this.vytvorMriezku(rozmer);
+        /* Rozhrani */
+        this.vytvorMrizku(rozmer);
         this.casovac = new Casovac(5, 5, 25);
         this.displejMin = new Displej(720, 5, 25, -1);
         this.aktualizujDisplej(this.pocetMin);
         this.tlacidla = new ArrayList<>();
         this.generujTlacidla();
 
-        this.hraSa = true;
+        this.SQLconnection();
+
+        this.hraProbiha = true;
         new Manazer(this);
     }
 
-    public void tik() { //Volá sa každú sekundu
-        if (this.hraSa) {
-            this.casovac.pridaj();
+    public void tik() {
+        if (this.hraProbiha) {
+            this.casovac.pridej();
         }
     }
     
-    public void klik(int x, int y, boolean laveTlacidlo) {
-        if (this.hraSa) { //Ak prebieha hra
-            if (this.mriezka.klik(x, y, laveTlacidlo)) { //Ak klikol na políčko
-                VysledokHry vysledok = this.mriezka.skoncilaHra();
+    public void klik(int x, int y, boolean leveTlacidlo) {
+        if (this.hraProbiha) {
+            if (this.mrizka.klik(x, y, leveTlacidlo)) {
+                VysledekHry vysledok = this.mrizka.skoncilaHra();
                 
-                if (vysledok != VysledokHry.PREBIEHA) {
-                    this.hraSa = false;
-                    this.mriezka.zobrazVsetkyMiny();
-                    if (vysledok == VysledokHry.VYHRAL) { 
-                        this.aktualizujRekord();
-                    }
-                    JOptionPane.showMessageDialog(null, this.formatujTextKoncaHry(vysledok), vysledok.getVyhernaSprava(), JOptionPane.INFORMATION_MESSAGE);
+                if (vysledok != VysledekHry.PROBIHA) {
+                    this.hraProbiha = false;
+                    this.mrizka.zobrazVsetkyMiny();
+
+                    this.result = vysledok.getVyhernaZprava();
+
+                    JOptionPane.showMessageDialog(null, this.formatujTextKoncaHry(vysledok), vysledok.getVyhernaZprava(), JOptionPane.INFORMATION_MESSAGE);
+                    this.SQLvkladani();
                 }
-                
-                int zostava = this.mriezka.getPocetMin() - this.mriezka.getPocetVlajok();
-                this.aktualizujDisplej(zostava);
+                int zustava = this.mrizka.getPocetMin() - this.mrizka.getPocetVlajek();
+                this.aktualizujDisplej(zustava);
                 return;
             }
         }
         
         for (Tlacidlo tlacidlo : this.tlacidla) {
-            if (!tlacidlo.boloStlacene(x, y)) {
+            if (!tlacidlo.byloStlaceno(x, y)) {
                 continue;
             }
             
@@ -84,17 +98,14 @@ public class Miny {
                 break;
             case RESTART:
                 this.casovac.vynuluj();
-                this.hraSa = true;
-                this.mriezka.restart();
+                this.hraProbiha = true;
+                this.mrizka.restart();
                 this.aktualizujDisplej(this.pocetMin);
                 break;
             case NAPOVEDA:
-                JOptionPane.showMessageDialog(null, "Lavé tlačidlo myši: Odhalenie políčka\nPravé tlačidlo myši: Položenie vlajky", "Nápoveda", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Levé tlačitko myši: Odhalení políčka\nPravé tlačitko myši: Vložení vlajky", "Nápověda", JOptionPane.INFORMATION_MESSAGE);
                 break;
-            case REKORD:
-                JOptionPane.showMessageDialog(null, this.formatujRekord(), "Rekord", JOptionPane.INFORMATION_MESSAGE);
-                break;
-            case KONIEC:
+            case KONEC:
                 System.exit(0);   
         }
     }
@@ -105,26 +116,26 @@ public class Miny {
         }
     }
     
-    private void vytvorMriezku(int rozmer) {
-        if (this.mriezka != null) {
-            this.mriezka.skry();
+    private void vytvorMrizku(int rozmer) {
+        if (this.mrizka != null) {
+            this.mrizka.skryt();
         }
-        int velkostPolicok = 350 / (rozmer + 1);
-        //Centrovanie hracej oblasti
-        int polohaX = Miny.SIRKA / 2 - (rozmer * (velkostPolicok + 1) + 1) / 2;
-        int polohaY = Miny.VYSKA / 2 - (rozmer * (velkostPolicok + 1) + 1) / 2;
+        int velikostPolicek = 350 / (rozmer + 1);
+
+        int polohaX = Miny.SIRKA / 2 - (rozmer * (velikostPolicek + 1) + 1) / 2;
+        int polohaY = Miny.VYSKA / 2 - (rozmer * (velikostPolicek + 1) + 1) / 2;
         
-        this.mriezka = new Mriezka(polohaX, polohaY, rozmer, velkostPolicok, this.pocetMin);
+        this.mrizka = new Mrizka(polohaX, polohaY, rozmer, velikostPolicek, this.pocetMin);
     }
 
 
-    private void aktualizujDisplej(int zostava) { //Stará sa o správne zobrazovanie
-        if (zostava > 99) {
+    private void aktualizujDisplej(int zustava) {
+        if (zustava > 99) {
             this.displejMin.zobraz(99);
-        } else if (zostava < 0) {
+        } else if (zustava < 0) {
             this.displejMin.zobraz(0);
         } else {
-            this.displejMin.zobraz(zostava);
+            this.displejMin.zobraz(zustava);
         }
     }
 
@@ -132,57 +143,63 @@ public class Miny {
         this.tlacidla.add(tlacidlo);
     }
 
-    private String formatujTextKoncaHry(VysledokHry vysledok) {
-        return String.format("%s, tvoj čas bol %s", vysledok.getVyhernaSprava(), this.casovac.getFromatovanyCas());
-    }
-
-    private String formatujRekord() {
-        SystemUkladania ins = SystemUkladania.dajInstanciu();
-        int minuty = ins.getUdaj("minuty");
-        int sekundy = ins.getUdaj("sekundy");
-
-        if (minuty < 0 || sekundy < 0) {
-            return "Ešte nemáš žiadny osobný rekord";
-        }
-
-        return String.format("Tvoj osobný rekord je %s:%s", Operacie.getHodnotaSNulou(minuty), Operacie.getHodnotaSNulou(sekundy));
-    }
-
-    private void aktualizujRekord() {
-        SystemUkladania ins = SystemUkladania.dajInstanciu();
-        int[] novyCas = this.casovac.getCas();
-        int minuty = ins.getUdaj("minuty");
-        int sekundy = ins.getUdaj("sekundy");
-
-        if ((novyCas[0] <= minuty && novyCas[1] < sekundy) || (minuty < 0 || sekundy < 0)) {
-            ins.aktualizujUdaj("minuty", novyCas[0]);
-            ins.aktualizujUdaj("sekundy", novyCas[1]);
-            return;
-        }
+    private String formatujTextKoncaHry(VysledekHry vysledok) {
+        return String.format("%s, tvůj čas byl %s", vysledok.getVyhernaZprava(), this.casovac.getFormatovanyCas());
     }
 
     private void novaHra() {
-        int rozmer = this.vypytajVstup("Zadaj rozmer NxN (2 - 30):", 2, 30);
-        this.pocetMin = this.vypytajVstup(String.format("Zadaj počet mín (1 - %d):", rozmer * rozmer - 2), 1, rozmer * rozmer - 2);
+        this.jmeno = JOptionPane.showInputDialog(null, "Zadej sve jmeno:");
+        rozmer = this.zeptejVstup("Zadej rozmer NxN (2 - 20):", 2, 20);
+        this.pocetMin = this.zeptejVstup(String.format("Zadej počet mín (1 - %d):", rozmer * rozmer - 2), 1, rozmer * rozmer - 2);
 
-        SystemUkladania.dajInstanciu().aktualizujUdaj("minuty", -1);
-        SystemUkladania.dajInstanciu().aktualizujUdaj("sekundy", -1);
-        SystemUkladania.dajInstanciu().aktualizujUdaj("pocetMin", this.pocetMin);
-        SystemUkladania.dajInstanciu().aktualizujUdaj("rozmer", rozmer);
-
-        this.vytvorMriezku(rozmer);
-        this.hraSa = true;
+        this.vytvorMrizku(rozmer);
+        this.hraProbiha = true;
         this.aktualizujDisplej(this.pocetMin);
         this.casovac.vynuluj();
     }
 
-    private int vypytajVstup(String text, int min, int max) {
+    private int zeptejVstup(String text, int min, int max) {
         String zadane;
 
         do {
             zadane = JOptionPane.showInputDialog(null, text);
-        } while (!Operacie.jeCislo(zadane) || Integer.parseInt(zadane) < min || Integer.parseInt(zadane) > max);
+        } while (!Operace.jeCislo(zadane) || Integer.parseInt(zadane) < min || Integer.parseInt(zadane) > max);
 
         return Integer.parseInt(zadane);
+    }
+
+    private void SQLconnection() {
+        try {
+            Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+            System.out.println("Connected to PostgreSQL");
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Error in connecting to PostgreSQL");
+            e.printStackTrace();
+        }
+    }
+
+    private void SQLvkladani() {
+        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+             )
+        {
+            PreparedStatement příkaz = connection.prepareStatement("INSERT INTO Minesweeper (name, size, miny, cas, result) VALUES (?,?,?,?,?)");
+            int[] novyCas = this.casovac.getCas();
+
+            int minuty = novyCas[0];
+            int sekundy = novyCas[1];
+
+            cas = String.format("%s:%s", Operace.getHodnotaSNulou(minuty), Operace.getHodnotaSNulou(sekundy));
+            příkaz.setString(1,this.jmeno);
+            příkaz.setInt(2,this.rozmer);
+            příkaz.setInt(3,this.pocetMin);
+            příkaz.setString(4,cas);
+            příkaz.setString(5,this.result);
+
+            příkaz.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error in insert to PostgreSQL");
+            e.printStackTrace();
+        }
     }
 }

@@ -1,52 +1,24 @@
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-import java.awt.Graphics2D;
-import java.awt.Color;
-import java.awt.Image;
-import java.awt.Shape;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.event.MouseListener;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-/**
- * Canvas is a class to allow for simple graphical drawing on a canvas.
- * This is a modification of the general purpose Canvas, specially made for
- * the BlueJ "shapes" example. 
- *
- * @author: Bruce Quig
- * @author: Michael Kolling (mik)
- *
- * @version: 1.6.1 (shapes)
- */
 public class Platno {
-    // Note: The implementation of this class (specifically the handling of
-    // shape identity and colors) is slightly more complex than necessary. This
-    // is done on purpose to keep the interface and instance fields of the
-    // shape objects in this project clean and simple for educational purposes.
-
+    
     private static Platno platnoSingleton;
 
-    /**
-     * Factory method to get the canvas singleton object.
-     */
-    public static Platno dajPlatno() {
+    public static Platno dejPlatno() {
         if (Platno.platnoSingleton == null) {
             Platno.platnoSingleton = new Platno("Míny", Miny.SIRKA, Miny.VYSKA, Color.white);
         }
         Platno.platnoSingleton.setVisible(true);
         return Platno.platnoSingleton;
     }
-
-    //  ----- instance part -----
 
     private JFrame frame;
     private CanvasPane canvas;
@@ -56,14 +28,8 @@ public class Platno {
     private Timer timer;
     private List<Object> objekty;
     private HashMap<Object, IDraw> tvary;
+
     
-    /**
-     * Create a Canvas.
-     * @param title  title to appear in Canvas Frame
-     * @param width  the desired width for the canvas
-     * @param height  the desired height for the canvas
-     * @param bgClour  the desired background colour of the canvas
-     */
     private Platno(String titulok, int sirka, int vyska, Color pozadie) {
         this.frame = new JFrame();
         this.canvas = new CanvasPane();
@@ -77,18 +43,9 @@ public class Platno {
         this.objekty = new ArrayList<Object>();
         this.tvary = new HashMap<Object, IDraw>();
     }
-
-    /**
-     * Set the canvas visibility and brings canvas to the front of screen
-     * when made visible. This method can also be used to bring an already
-     * visible canvas to the front of other windows.
-     * @param visible  boolean value representing the desired visibility of
-     * the canvas (true or false) 
-     */
+    
     public void setVisible(boolean visible) {
         if (this.graphic == null) {
-            // first time: instantiate the offscreen image and fill it with
-            // the background colour
             Dimension size = this.canvas.getSize();
             this.canvasImage = this.canvas.createImage(size.width, size.height);
             this.graphic = (Graphics2D)this.canvasImage.getGraphics();
@@ -99,84 +56,55 @@ public class Platno {
         this.frame.setVisible(visible);
     }
 
-    /**
-     * Draw a given shape onto the canvas.
-     * @param  referenceObject  an object to define identity for this shape
-     * @param  color            the color of the shape
-     * @param  shape            the shape object to be drawn on the canvas
-     */
-     // Note: this is a slightly backwards way of maintaining the shape
-     // objects. It is carefully designed to keep the visible shape interfaces
-     // in this project clean and simple for educational purposes.
-    public void draw(Object objekt, String farba, Shape tvar) {
-        this.objekty.remove(objekt);   // just in case it was already there
-        this.objekty.add(objekt);      // add at the end
-        this.tvary.put(objekt, new PopisTvaru(tvar, farba));
+    public void draw(Object objekt, String barva, Shape tvar) {
+        this.objekty.remove(objekt);  
+        this.objekty.add(objekt);      
+        this.tvary.put(objekt, new PopisTvaru(tvar, barva));
         this.redraw();
     }
     
-    public void draw(Object objekt, String text, int x, int y, int velkostPisma) { 
+    public void draw(Object objekt, String text, int x, int y, int velikostPisma) { 
         this.objekty.remove(objekt);
         this.objekty.add(objekt);
-        this.tvary.put(objekt, new PopisTextu(text, x, y, velkostPisma));
+        this.tvary.put(objekt, new PopisTextu(text, x, y, velikostPisma));
         this.redraw();
     } 
-
-    /**
-     * Draw a given image onto the canvas.
-     * @param  referenceObject  an object to define identity for this image
-     * @param  image            the image object to be drawn on the canvas
-     * @param  transform        the transformation applied to the image
-     */
-     // Note: this is a slightly backwards way of maintaining the shape
-     // objects. It is carefully designed to keep the visible shape interfaces
-     // in this project clean and simple for educational purposes.
+    
     public void draw(Object objekt, BufferedImage image, AffineTransform transform) {
-        this.objekty.remove(objekt);   // just in case it was already there
-        this.objekty.add(objekt);      // add at the end
+        this.objekty.remove(objekt);
+        this.objekty.add(objekt);
         this.tvary.put(objekt, new PopisObrazku(image, transform));
         this.redraw();
     }
- 
-    /**
-     * Erase a given shape's from the screen.
-     * @param  referenceObject  the shape object to be erased 
-     */
+    
     public void erase(Object objekt) {
-        this.objekty.remove(objekt);   // just in case it was already there
+        this.objekty.remove(objekt);
         this.tvary.remove(objekt);
         this.redraw();
     }
-
-    /**
-     * Set the foreground colour of the Canvas.
-     * @param  newColour   the new colour for the foreground of the Canvas 
-     */
-    public void setForegroundColor(String farba) {
-        if (farba.equals("red")) {
+    
+    public void setForegroundColor(String barva) {
+        if (barva.equals("red")) {
             this.graphic.setColor(Color.red);
-        } else if (farba.equals("black")) {
+        } else if (barva.equals("black")) {
             this.graphic.setColor(Color.black);
-        } else if (farba.equals("blue")) {
+        } else if (barva.equals("blue")) {
             this.graphic.setColor(Color.blue);
-        } else if (farba.equals("yellow")) {
+        } else if (barva.equals("yellow")) {
             this.graphic.setColor(Color.yellow);
-        } else if (farba.equals("green")) {
+        } else if (barva.equals("green")) {
             this.graphic.setColor(Color.green);
-        } else if (farba.equals("magenta")) {
+        } else if (barva.equals("magenta")) {
             this.graphic.setColor(Color.magenta);
-        } else if (farba.equals("white")) {
+        } else if (barva.equals("white")) {
             this.graphic.setColor(Color.white);
-        } else if (farba.equals("gray")) {
+        } else if (barva.equals("gray")) {
             this.graphic.setColor(new Color(150, 150, 150));
         } else {
             this.graphic.setColor(Color.black);
         }
     }
 
-    /**
-     * * Redraw all shapes currently on the Canvas.
-     */
     private void redraw() {
         this.erase();
         for (Object tvar : this.objekty ) {
@@ -184,10 +112,7 @@ public class Platno {
         }
         this.canvas.repaint();
     }
-       
-    /**
-     * Erase the whole canvas. (Does not repaint.)
-     */
+    
     private void erase() {
         Color original = this.graphic.getColor();
         this.graphic.setColor(this.pozadie);
@@ -203,78 +128,63 @@ public class Platno {
     public void addTimerListener(ActionListener listener) {
         this.timer.addActionListener(listener);
     }
-
-
-    /************************************************************************
-     * Inner class CanvasPane - the actual canvas component contained in the
-     * Canvas frame. This is essentially a JPanel with added capability to
-     * refresh the image drawn on it.
-     */
+    
     private class CanvasPane extends JPanel {
         public void paint(Graphics graphic) {
             graphic.drawImage(Platno.this.canvasImage, 0, 0, null);
         }
     }
     
-    /***********************************************************************
-     * Inner interface IDraw - defines functions that need to be supported by
-     * shapes descriptors
-     */
     private interface IDraw {
         void draw(Graphics2D graphic);
     }
     
-    /************************************************************************
-     * Inner class CanvasPane - the actual canvas component contained in the
-     * Canvas frame. This is essentially a JPanel with added capability to
-     * refresh the image drawn on it.
-     */
     private class PopisTvaru implements Platno.IDraw {
         private Shape tvar;
-        private String farba;
+        private String barva;
 
-        PopisTvaru(Shape tvar, String farba) {
+        PopisTvaru(Shape tvar, String barva) {
             this.tvar = tvar;
-            this.farba = farba;
+            this.barva = barva;
         }
 
         public void draw(Graphics2D graphic) {
-            Platno.this.setForegroundColor(this.farba);
+            Platno.this.setForegroundColor(this.barva);
             graphic.fill(this.tvar);
         }
     }
 
     private class PopisTextu implements Platno.IDraw {
         private String text;
-        private int velkostPisma;
+        private int velikostPisma;
         private int x;
         private int y;
 
-        PopisTextu(String text, int x, int y, int velkostPisma) {
+        PopisTextu(String text, int x, int y, int velikostPisma) {
             this.text = text;
-            this.velkostPisma = velkostPisma;
+            this.velikostPisma = velikostPisma;
             this.x = x;
             this.y = y;
         }
 
         public void draw(Graphics2D graphic) {
             Platno.this.setForegroundColor("black");   
-            graphic.setFont(new Font("TimesRoman", Font.PLAIN, this.velkostPisma));
+            graphic.setFont(new Font("TimesRoman", Font.PLAIN, this.velikostPisma));
             graphic.drawString(this.text, this.x, this.y);
         }
     }
     
     private class PopisObrazku implements Platno.IDraw {
-        private BufferedImage obrazok;
+        private BufferedImage obrazek;
         private AffineTransform transformacia;
         
-        PopisObrazku(BufferedImage obrazok, AffineTransform transformacia) {
-            this.obrazok = obrazok;
+        PopisObrazku(BufferedImage obrazek, AffineTransform transformacia) {
+            this.obrazek = obrazek;
             this.transformacia = transformacia;
         }
         
         public void draw(Graphics2D graphic) {
-            graphic.drawImage(this.obrazok, this.transformacia, null); 
+            graphic.drawImage(this.obrazek, this.transformacia, null); 
         }
     }
 }

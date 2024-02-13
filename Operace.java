@@ -1,4 +1,4 @@
-public class Operacie {
+public class Operace {
 
     public static String getHodnotaSNulou(int hodnota) {
         if (hodnota < 10) {

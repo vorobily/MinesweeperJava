@@ -1,6 +1,6 @@
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 
 public class Manazer {
@@ -10,7 +10,7 @@ public class Manazer {
     public Manazer(Miny miny) {
         this.dalsiTick = System.nanoTime();
         this.miny = miny;
-        Platno platno = Platno.dajPlatno();
+        Platno platno = Platno.dejPlatno();
 
         platno.addTimerListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
@@ -24,10 +24,10 @@ public class Manazer {
         platno.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent event) {
                 switch (event.getButton()) {
-                    case MouseEvent.BUTTON1: //Ľavé
+                    case MouseEvent.BUTTON1: //Leve
                         Manazer.this.miny.klik(event.getX(), event.getY(), true);
                         break;
-                    case MouseEvent.BUTTON3: //Pravé
+                    case MouseEvent.BUTTON3: //Prave
                         Manazer.this.miny.klik(event.getX(), event.getY(), false);
                 }
             }

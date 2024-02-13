@@ -1,17 +1,17 @@
-public class Displej implements IUIPrvok {
+public class Displej implements IUIPrvek {
     private Segmentovka[] segmentovky;
     private int hodnota;
-    private int najvacsiaHodnota;
+    private int nejvissiHodnota;
     private boolean jeViditelny;
 
-    public Displej(int poziciaX, int poziciaY, int velkost, int najvacsiaHodnota) {
+    public Displej(int poziceX, int poziceY, int velikost, int nejvissiHodnota) {
         this.segmentovky = new Segmentovka[2];
         this.hodnota = 0;
-        this.najvacsiaHodnota = najvacsiaHodnota;
+        this.nejvissiHodnota = nejvissiHodnota;
         this.jeViditelny = true;
 
-        this.segmentovky[0] = new Segmentovka(poziciaX, poziciaY, velkost);
-        this.segmentovky[1] = new Segmentovka(poziciaX + velkost / 5 * 8 , poziciaY, velkost);
+        this.segmentovky[0] = new Segmentovka(poziceX, poziceY, velikost);
+        this.segmentovky[1] = new Segmentovka(poziceX + velikost / 5 * 8 , poziceY, velikost);
 
         this.zobraz(this.hodnota);
     }
@@ -30,10 +30,10 @@ public class Displej implements IUIPrvok {
         this.segmentovky[1].zobraz(cislo % 10);
     }
 
-    public boolean pridaj() {
+    public boolean pridej() {
         ++this.hodnota;
 
-        if (this.hodnota >= this.najvacsiaHodnota && this.najvacsiaHodnota != -1) {
+        if (this.hodnota >= this.nejvissiHodnota && this.nejvissiHodnota != -1) {
             this.zobraz(0);
             return true;
         }
@@ -42,11 +42,7 @@ public class Displej implements IUIPrvok {
         return false;
     }
 
-    public void vynuluj() {
-        this.zobraz(0);
-    }
-
-    public void skry() {
+    public void skryt() {
         this.segmentovky[0].zobraz(-1);
         this.segmentovky[1].zobraz(-1);
         this.jeViditelny = false;
